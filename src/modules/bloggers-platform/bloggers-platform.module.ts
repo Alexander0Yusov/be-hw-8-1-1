@@ -2,16 +2,13 @@ import { Module } from '@nestjs/common';
 import { Blog } from './domain/blog/blog.entity';
 import { BlogsController } from './api/blogs.controller';
 import { BlogsRepository } from './infrastructure/blogs.repository';
-import { BlogsService } from './application/blogs.service';
 import { BlogsQueryRepository } from './infrastructure/query/blogs-query.repository';
 import { PostsController } from './api/posts.controller';
 import { PostsRepository } from './infrastructure/posts.repository';
 import { PostsQueryRepository } from './infrastructure/query/posts-query.repository';
-import { PostsService } from './application/posts.service';
 import { Post } from './domain/post/post.entity';
 import { Like } from './domain/like/like.entity';
 import { CommentsRepository } from './infrastructure/comments.repository';
-import { CommentsService } from './application/comments.service';
 import { CommentsController } from './api/comments.controller';
 import { Comment } from './domain/comment/comment.entity';
 import { CommentsQueryRepository } from './infrastructure/query/comments-query.repository';
@@ -35,6 +32,8 @@ import { DeletePostUseCase } from './application/usecases/posts/delete-post.usec
 import { GetPostsByBlogIdHandler } from './application/usecases/posts/get-posts-by-blog-id.query-handler';
 import { GetPostHandler } from './application/usecases/posts/get-post.query-handler';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { BloggersController } from './api/bloggers.controller';
+import { UpdateBlogBindingWithUserUseCase } from './application/usecases/blogs/update-blog-binding-with-user.usecase';
 
 export const CommandHandlers = [
   CreateCommentUseCase,
@@ -53,6 +52,7 @@ export const CommandHandlers = [
   CreateBlogUseCase,
   UpdateBlogUseCase,
   DeleteBlogUseCase,
+  UpdateBlogBindingWithUserUseCase,
 ];
 
 @Module({
@@ -65,6 +65,7 @@ export const CommandHandlers = [
     PostsController,
     CommentsController,
     SaBlogsController,
+    BloggersController,
   ],
   providers: [
     BlogsRepository,

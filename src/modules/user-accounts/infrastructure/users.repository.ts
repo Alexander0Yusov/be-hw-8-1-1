@@ -86,24 +86,6 @@ export class UsersRepository {
     return user;
   }
 
-  //   async isEmailAlreadyConfirmed(email: string): Promise<boolean> {
-  //     const query = `
-  //   SELECT ec.*
-  //   FROM email_confirmations ec
-  //   JOIN users u ON ec.user_id = u.id
-  //   WHERE u.email = $1
-  //     AND ec.is_confirmed = TRUE
-  // `;
-
-  //     const result = await this.dataSource.query(query, [email]);
-
-  //     if (result.length > 0) {
-  //       return true;
-  //     }
-
-  //     return false;
-  //   }
-
   async softDeleteById(id: number): Promise<void> {
     const user = await this.userRepo.findOne({ where: { id } });
 

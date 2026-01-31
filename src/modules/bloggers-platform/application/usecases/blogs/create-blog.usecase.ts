@@ -4,7 +4,10 @@ import { BlogInputDto } from 'src/modules/bloggers-platform/dto/blog/blog-input.
 import { BlogsRepository } from 'src/modules/bloggers-platform/infrastructure/blogs.repository';
 
 export class CreateBlogCommand {
-  constructor(public dto: BlogInputDto) {}
+  constructor(
+    public dto: BlogInputDto,
+    public userId?: string,
+  ) {}
 }
 
 @CommandHandler(CreateBlogCommand)
@@ -13,9 +16,14 @@ export class CreateBlogUseCase
 {
   constructor(private blogsRepository: BlogsRepository) {}
 
-  async execute({ dto }: CreateBlogCommand): Promise<string> {
-    const newBlog = Blog.createInstance(dto);
+  async execute({ dto, userId }: CreateBlogCommand): Promise<string> {
+    const newBlog = Blog.createInstance(
+      dto,
+      userId ? Number(userId) : undefined,
+    );
+
     const blog = await this.blogsRepository.save(newBlog);
+
     return String(blog.id);
   }
 }

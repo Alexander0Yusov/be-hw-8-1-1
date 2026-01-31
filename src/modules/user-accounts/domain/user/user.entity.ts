@@ -10,6 +10,7 @@ import { Session } from '../session/session.entity';
 import { Comment } from 'src/modules/bloggers-platform/domain/comment/comment.entity';
 import { Like } from 'src/modules/bloggers-platform/domain/like/like.entity';
 import { PlayerProgress } from 'src/modules/quiz/domain/player-progress/player-progress.entity';
+import { Blog } from 'src/modules/bloggers-platform/domain/blog/blog.entity';
 
 export const loginConstraints = {
   minLength: 3,
@@ -52,10 +53,11 @@ export class User extends BaseDomainEntity {
   @OneToMany((type) => Comment, (c) => c.user, { cascade: true })
   public comments: Comment[];
 
-  @OneToMany((type) => Like, (l) => l.user, {
-    cascade: true,
-  })
+  @OneToMany((type) => Like, (l) => l.user, { cascade: true })
   public likes: Like[];
+
+  @OneToMany((type) => Blog, (b) => b.user)
+  public blogs: Blog[];
 
   //-----
   //quiz

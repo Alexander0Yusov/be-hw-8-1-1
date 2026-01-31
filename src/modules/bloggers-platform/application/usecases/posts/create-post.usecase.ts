@@ -1,7 +1,9 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
+import { DomainExceptionCode } from 'src/core/exceptions/domain-exception-codes';
+import { DomainException } from 'src/core/exceptions/domain-exceptions';
 import { Post } from 'src/modules/bloggers-platform/domain/post/post.entity';
+import { BlogsRepository } from 'src/modules/bloggers-platform/infrastructure/blogs.repository';
 import { PostsRepository } from 'src/modules/bloggers-platform/infrastructure/posts.repository';
-import { BlogsQueryRepository } from 'src/modules/bloggers-platform/infrastructure/query/blogs-query.repository';
 
 export class PostCreateForBlogDto {
   title: string;
@@ -13,6 +15,7 @@ export class CreatePostCommand {
   constructor(
     public dto: PostCreateForBlogDto,
     public blogId: string,
+    public userId?: string,
   ) {}
 }
 
@@ -22,16 +25,23 @@ export class CreatePostUseCase
 {
   constructor(
     private postsRepository: PostsRepository,
-    private blogsQueryRepository: BlogsQueryRepository,
+    private blogsRepository: BlogsRepository,
   ) {}
 
-  async execute({ dto, blogId }: CreatePostCommand): Promise<string> {
-    await this.blogsQueryRepository.findByIdOrNotFoundFail(blogId);
+  async execute({ dto, blogId, userId }: CreatePostCommand): Promise<string> {
+    const blog = await this.blogsRepository.findOrNotFoundFail(blogId);
 
-    const newPost = Post.createInstance({ ...dto, blogId });
+    if (blog.userId === Number(userId)) {
+      const newPost = Post.createInstance({ ...dto, blogId });
 
-    const post = await this.postsRepository.save(newPost);
+      const post = await this.postsRepository.save(newPost);
 
-    return String(post.id);
+      return String(post.id);
+    }
+
+    throw new DomainException({
+      code: DomainExceptionCode.Forbidden,
+      message: 'Blog was created by another user',
+    });
   }
 }

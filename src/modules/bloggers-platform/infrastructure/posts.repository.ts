@@ -25,6 +25,7 @@ export class PostsRepository {
         id: true,
         content: true,
         createdAt: true,
+        blogId: true,
       },
     });
 
