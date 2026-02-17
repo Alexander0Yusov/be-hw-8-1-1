@@ -1,8 +1,17 @@
 import { Controller, Get, Param, Query, UseGuards } from '@nestjs/common';
+import {
+  ApiTags,
+  ApiOperation,
+  ApiResponse,
+  ApiParam,
+  ApiQuery,
+  ApiExtraModels,
+  getSchemaPath,
+} from '@nestjs/swagger';
 import { BlogViewDto } from '../dto/blog/blog-view.dto';
 import { BlogsQueryRepository } from '../infrastructure/query/blogs-query.repository';
 import { GetBlogsQueryParams } from '../dto/blog/get-blogs-query-params.input-dto';
-import { PaginatedViewDto } from '../../../../src/core/dto/base.paginated.view-dto';
+import { PaginatedViewDto } from '../../../core/dto/base.paginated.view-dto';
 import { PostViewDto } from '../dto/post/post-view.dto';
 import { PostsQueryRepository } from '../infrastructure/query/posts-query.repository';
 import { GetPostsQueryParams } from '../dto/post/get-posts-query-params.input-dto';
@@ -13,6 +22,7 @@ import { UserContextDto } from 'src/modules/user-accounts/guards/dto/user-contex
 import { LikesQueryRepository } from '../infrastructure/query/likes-query.repository';
 import { postItemsGetsMyStatus } from '../application/mapers/post-items-gets-my-status';
 
+@ApiTags('Blogs')
 @Controller('blogs')
 @SkipThrottle()
 export class BlogsController {
@@ -23,11 +33,69 @@ export class BlogsController {
   ) {}
 
   @Get(':id')
+  @ApiOperation({ summary: 'Get blog by id' })
+  @ApiParam({ name: 'id', description: 'Blog id', required: true })
+  @ApiResponse({ status: 200, description: 'Blog found', type: BlogViewDto })
+  @ApiResponse({ status: 404, description: 'Blog not found' })
   async getById(@Param('id') id: string): Promise<BlogViewDto> {
     return this.blogsQueryRepository.findByIdOrNotFoundFail(id);
   }
 
   @Get()
+  @ApiOperation({ summary: 'Get all blogs' })
+  @ApiExtraModels(PaginatedViewDto, BlogViewDto)
+  @ApiQuery({
+    name: 'searchNameTerm',
+    required: false,
+    description:
+      'Search term for blog Name: Name should contains this term in any position',
+    type: String,
+  })
+  @ApiQuery({
+    name: 'sortBy',
+    required: false,
+    description: 'Default value : createdAt',
+    example: 'createdAt',
+    type: String,
+  })
+  @ApiQuery({
+    name: 'sortDirection',
+    required: false,
+    description: 'Default value : desc. Available values : asc, desc',
+    example: 'desc',
+    type: String,
+  })
+  @ApiQuery({
+    name: 'pageNumber',
+    required: false,
+    description: 'pageNumber is number of portions that should be returned',
+    example: 1,
+    type: Number,
+  })
+  @ApiQuery({
+    name: 'pageSize',
+    required: false,
+    description: 'pageSize is portions size that should be returned',
+    example: 10,
+    type: Number,
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Paginated list of blogs',
+    schema: {
+      allOf: [
+        { $ref: getSchemaPath(PaginatedViewDto) },
+        {
+          properties: {
+            items: {
+              type: 'array',
+              items: { $ref: getSchemaPath(BlogViewDto) },
+            },
+          },
+        },
+      ],
+    },
+  })
   async getAll(
     @Query() query: GetBlogsQueryParams,
   ): Promise<PaginatedViewDto<BlogViewDto[]>> {
