@@ -105,6 +105,72 @@ export class BlogsController {
 
   @Get(':id/posts')
   @UseGuards(JwtOptionalAuthGuard)
+  @ApiOperation({
+    summary: 'Get all posts for a blog',
+    description:
+      'Retrieves a paginated list of all posts for the specified blog. JWT authentication is optional.',
+  })
+  @ApiParam({
+    name: 'id',
+    description: 'The unique identifier of the blog to get posts for',
+    required: true,
+    type: String,
+    example: '1',
+  })
+  @ApiQuery({
+    name: 'sortBy',
+    required: false,
+    description: 'Field to sort by',
+    example: 'createdAt',
+    type: String,
+    schema: { default: 'createdAt' },
+  })
+  @ApiQuery({
+    name: 'sortDirection',
+    required: false,
+    description: 'Sort direction: asc or desc',
+    example: 'desc',
+    type: String,
+    schema: { default: 'desc' },
+  })
+  @ApiQuery({
+    name: 'pageNumber',
+    required: false,
+    description: 'Page number (1-based)',
+    example: 1,
+    type: Number,
+    schema: { default: 1 },
+  })
+  @ApiQuery({
+    name: 'pageSize',
+    required: false,
+    description: 'Number of items per page',
+    example: 10,
+    type: Number,
+    schema: { default: 10 },
+  })
+  @ApiExtraModels(PaginatedViewDto, PostViewDto)
+  @ApiResponse({
+    status: 200,
+    description: 'Paginated list of posts for the blog',
+    schema: {
+      allOf: [
+        { $ref: getSchemaPath(PaginatedViewDto) },
+        {
+          properties: {
+            items: {
+              type: 'array',
+              items: { $ref: getSchemaPath(PostViewDto) },
+            },
+          },
+        },
+      ],
+    },
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Blog not found with the specified id',
+  })
   async getPostsForBlog(
     @Param('id') id: string,
     @Query() query: GetPostsQueryParams,
