@@ -9,6 +9,7 @@ import {
   Res,
   UseGuards,
 } from '@nestjs/common';
+import { ApiResponse } from '@nestjs/swagger';
 import { UserInputDto } from '../dto/user/user-input.dto';
 import { LocalAuthGuard } from '../guards/local/local-auth.guard';
 import { UserContextDto } from '../guards/dto/user-context.dto';
@@ -81,6 +82,7 @@ export class AuthController {
   @Post('refresh-token')
   @UseGuards(RefreshJwtAuthGuard)
   @HttpCode(HttpStatus.OK)
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
   async refreshToken(
     @Device() deviceContext: DeviceContextDto,
     @Res({ passthrough: true }) response: Response,
@@ -105,6 +107,7 @@ export class AuthController {
   @Post('logout')
   @HttpCode(HttpStatus.NO_CONTENT)
   @UseGuards(RefreshJwtAuthGuard)
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
   async logout(@Device() deviceContext: DeviceContextDto): Promise<void> {
     await this.commandBus.execute(
       new RevokingSessionCommand({ deviceId: deviceContext.deviceId }),
@@ -113,6 +116,7 @@ export class AuthController {
 
   @Get('me')
   @UseGuards(JwtAuthGuard)
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
   async me(@ExtractUserFromRequest() user: UserContextDto): Promise<MeViewDto> {
     return await this.queryBus.execute(new GetMeQuery({ id: user.id }));
     // return await this.authQueryRepository.me(user.id);

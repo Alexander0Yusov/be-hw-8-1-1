@@ -10,6 +10,7 @@ import {
   Query,
   UseGuards,
 } from '@nestjs/common';
+import { ApiResponse } from '@nestjs/swagger';
 import { JwtAuthGuard } from 'src/modules/user-accounts/guards/bearer/jwt-auth.guard';
 import { ExtractUserFromRequest } from 'src/modules/user-accounts/guards/decorators/param/extract-user-from-request.decorator';
 import { UserContextDto } from 'src/modules/user-accounts/guards/dto/user-context.dto';
@@ -45,6 +46,7 @@ export class PairGameQuizController {
   @Post('pairs/connection')
   @UseGuards(JwtAuthGuard)
   @HttpCode(HttpStatus.OK)
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
   async connectOrCreatePair(
     @ExtractUserFromRequest() user: UserContextDto,
   ): Promise<PostConnectionViewDto | null> {
@@ -60,6 +62,7 @@ export class PairGameQuizController {
   @Post('pairs/my-current/answers')
   @UseGuards(JwtAuthGuard)
   @HttpCode(HttpStatus.OK)
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
   async postAnswer(
     @ExtractUserFromRequest() user: UserContextDto,
     @Body() body: AnswerInputDto,
@@ -77,6 +80,7 @@ export class PairGameQuizController {
   @Get('pairs/my-current')
   @UseGuards(JwtAuthGuard)
   @HttpCode(HttpStatus.OK)
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
   async getCurrent(
     @ExtractUserFromRequest() user: UserContextDto,
   ): Promise<PostConnectionViewDto> {
@@ -114,6 +118,7 @@ export class PairGameQuizController {
   @Get('pairs/my')
   @UseGuards(JwtAuthGuard)
   @HttpCode(HttpStatus.OK)
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
   async getAll(
     @Query() query: GetMyGamesQueryParams,
     @ExtractUserFromRequest() user: UserContextDto,
@@ -129,6 +134,7 @@ export class PairGameQuizController {
   @Get('pairs/:id')
   @UseGuards(JwtAuthGuard)
   @HttpCode(HttpStatus.OK)
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
   async getCurrentById(
     @Param('id') id: string,
     @ExtractUserFromRequest() user: UserContextDto,

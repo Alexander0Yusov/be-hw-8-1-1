@@ -9,6 +9,7 @@ import {
   Put,
   UseGuards,
 } from '@nestjs/common';
+import { ApiResponse } from '@nestjs/swagger';
 import { CommentUpdateDto } from '../dto/comment/comment-update.dto';
 import { CommandBus } from '@nestjs/cqrs';
 import { UpdateCommentCommand } from '../application/usecases/comments/update-comment.usecase';
@@ -31,6 +32,7 @@ export class CommentsController {
   @Put(':id')
   @UseGuards(JwtAuthGuard)
   @HttpCode(HttpStatus.NO_CONTENT)
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
   async updateComment(
     @Param('id') id: string,
     @Body() body: CommentUpdateDto,
@@ -42,6 +44,7 @@ export class CommentsController {
   @Put(':id/like-status')
   @UseGuards(JwtAuthGuard)
   @HttpCode(HttpStatus.NO_CONTENT)
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
   async updateCommentLikeStatus(
     @Param('id') id: string,
     @Body() like: LikeInputDto,
@@ -55,6 +58,7 @@ export class CommentsController {
   @Delete(':id')
   @UseGuards(JwtAuthGuard)
   @HttpCode(HttpStatus.NO_CONTENT)
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
   async deleteComment(
     @Param('id') id: string,
     @ExtractUserFromRequest() user: UserContextDto,

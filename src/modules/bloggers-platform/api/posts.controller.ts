@@ -10,6 +10,17 @@ import {
   Query,
   UseGuards,
 } from '@nestjs/common';
+import {
+  ApiOperation,
+  ApiResponse,
+  ApiBody,
+  ApiBasicAuth,
+  ApiTags,
+  ApiQuery,
+  ApiExtraModels,
+  getSchemaPath,
+  ApiParam,
+} from '@nestjs/swagger';
 import { PostsQueryRepository } from '../infrastructure/query/posts-query.repository';
 import { PostInputDto } from '../dto/post/post-iput.dto';
 import { PostViewDto } from '../dto/post/post-view.dto';
@@ -36,6 +47,7 @@ import { commentItemsGetsMyStatus } from '../application/mapers/comment-items-ge
 import { GetPostQuery } from '../application/usecases/posts/get-post.query-handler';
 import { SkipThrottle } from '@nestjs/throttler';
 
+@ApiTags('Posts')
 @Controller('posts')
 @SkipThrottle()
 export class PostsController {
@@ -49,6 +61,11 @@ export class PostsController {
 
   @Post()
   @UseGuards(BasicAuthGuard)
+  @ApiOperation({ summary: 'Create a new post' })
+  @ApiBasicAuth()
+  @ApiBody({ type: PostInputDto })
+  @ApiResponse({ status: 201, description: 'Post created', type: PostViewDto })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
   async create(@Body() dto: PostInputDto): Promise<PostViewDto> {
     const postId = await this.commandBus.execute(
       new CreatePostCommand(
@@ -65,6 +82,16 @@ export class PostsController {
 
   @Get(':id')
   @UseGuards(JwtOptionalAuthGuard)
+  @ApiOperation({ summary: 'Get post by id' })
+  @ApiParam({
+    name: 'id',
+    description: 'Post id',
+    required: true,
+    type: String,
+    example: '1',
+  })
+  @ApiResponse({ status: 200, description: 'Post found', type: PostViewDto })
+  @ApiResponse({ status: 404, description: 'Post not found' })
   async getById(
     @Param('id') id: string,
     @ExtractUserIfExistsFromRequest() user: UserContextDto,
@@ -74,6 +101,53 @@ export class PostsController {
 
   @Get()
   @UseGuards(JwtOptionalAuthGuard)
+  @ApiOperation({ summary: 'Get all posts' })
+  @ApiExtraModels(PaginatedViewDto, PostViewDto)
+  @ApiQuery({
+    name: 'sortBy',
+    required: false,
+    description: 'Field to sort by',
+    example: 'createdAt',
+    type: String,
+  })
+  @ApiQuery({
+    name: 'sortDirection',
+    required: false,
+    description: 'asc or desc',
+    example: 'desc',
+    type: String,
+  })
+  @ApiQuery({
+    name: 'pageNumber',
+    required: false,
+    description: 'Page number',
+    example: 1,
+    type: Number,
+  })
+  @ApiQuery({
+    name: 'pageSize',
+    required: false,
+    description: 'Page size',
+    example: 10,
+    type: Number,
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Paginated list of posts',
+    schema: {
+      allOf: [
+        { $ref: getSchemaPath(PaginatedViewDto) },
+        {
+          properties: {
+            items: {
+              type: 'array',
+              items: { $ref: getSchemaPath(PostViewDto) },
+            },
+          },
+        },
+      ],
+    },
+  })
   async getAll(
     @Query() query: GetPostsQueryParams,
     @ExtractUserIfExistsFromRequest() user: UserContextDto,
@@ -97,6 +171,7 @@ export class PostsController {
 
   @Post(':id/comments')
   @UseGuards(JwtAuthGuard)
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
   async createCommentForCurrentPost(
     @Param('id') id: string,
     @Body() body: CommentInputDto,
@@ -115,6 +190,7 @@ export class PostsController {
   @Put(':id/like-status')
   @UseGuards(JwtAuthGuard)
   @HttpCode(HttpStatus.NO_CONTENT)
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
   async updateLikeStatusForCurrentPost(
     @Param('id') id: string,
     @Body() body: LikeInputDto,

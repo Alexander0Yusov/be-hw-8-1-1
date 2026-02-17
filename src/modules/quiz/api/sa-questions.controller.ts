@@ -13,6 +13,7 @@ import {
 } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { BasicAuthGuard } from 'src/modules/user-accounts/guards/basic/basi-auth.guard';
+import { ApiBasicAuth, ApiResponse } from '@nestjs/swagger';
 import { QuestionInputDto } from '../dto/question/question-input.dto';
 import { CreateQuestionCommand } from '../application/usecases/questions/create-question.usecase';
 import { QuestionViewDto } from '../dto/question/question-view.dto';
@@ -26,6 +27,7 @@ import { QuestionsQueryRepository } from '../infrastructure/query/questions-quer
 import { GetQuestionsQueryParams } from '../dto/question/get-questions-query-params.input-dto';
 
 @Controller('sa/quiz/questions')
+@ApiBasicAuth()
 export class SaQuestionsController {
   constructor(
     private readonly commandBus: CommandBus,
@@ -35,6 +37,7 @@ export class SaQuestionsController {
 
   @Post()
   @UseGuards(BasicAuthGuard)
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
   async createQuestion(
     @Body() body: QuestionInputDto,
   ): Promise<QuestionViewDto> {
@@ -48,6 +51,7 @@ export class SaQuestionsController {
   @Put(':id')
   @UseGuards(BasicAuthGuard)
   @HttpCode(HttpStatus.NO_CONTENT)
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
   async updateQuestion(
     @Param('id') id: string,
     @Body() body: QuestionInputDto,
@@ -58,6 +62,7 @@ export class SaQuestionsController {
   @Put(':id/publish')
   @UseGuards(BasicAuthGuard)
   @HttpCode(HttpStatus.NO_CONTENT)
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
   async updateQuestionStatus(
     @Param('id') id: string,
     @Body() body: QuestionUpdateStatusDto,
@@ -68,12 +73,14 @@ export class SaQuestionsController {
   @Delete(':id')
   @UseGuards(BasicAuthGuard)
   @HttpCode(HttpStatus.NO_CONTENT)
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
   async deleteQuestion(@Param('id') id: string): Promise<void> {
     await this.commandBus.execute(new DeleteQuestionCommand(id));
   }
 
   @Get()
   @UseGuards(BasicAuthGuard)
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
   async getAllQuestions(
     @Query() query: GetQuestionsQueryParams,
   ): Promise<PaginatedViewDto<QuestionViewDto[]>> {

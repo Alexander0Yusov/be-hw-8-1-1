@@ -24,6 +24,7 @@ import { CommandBus } from '@nestjs/cqrs';
 import { CreateUserCommand } from '../application/usecases/users/create-user.usecase';
 import { DeleteUserCommand } from '../application/usecases/users/delete-user.usecase';
 import { SkipThrottle } from '@nestjs/throttler';
+import { ApiBasicAuth, ApiResponse } from '@nestjs/swagger';
 
 @SkipThrottle()
 @Controller()
@@ -36,7 +37,9 @@ export class UsersController {
   ) {}
 
   @UseGuards(BasicAuthGuard)
+  @ApiBasicAuth()
   @Post('users')
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
   async create(@Body() dto: UserInputDto): Promise<UserViewDto | null> {
     // const userId = await this.usersService.createUser(dto);
 
@@ -71,7 +74,9 @@ export class UsersController {
 
   @Delete('users/:id')
   @UseGuards(BasicAuthGuard)
+  @ApiBasicAuth()
   @HttpCode(HttpStatus.NO_CONTENT)
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
   async deleteUser(@Param('id') id: string): Promise<void> {
     // return this.usersService.deleteUser(id);
   }
@@ -79,6 +84,8 @@ export class UsersController {
   //
   @Post('sa/users')
   @UseGuards(BasicAuthGuard)
+  @ApiBasicAuth()
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
   async createBySa(@Body() dto: UserInputDto): Promise<UserViewDto | null> {
     // const userId = await this.usersService.createUser(dto);
 
@@ -88,7 +95,9 @@ export class UsersController {
 
   @Get('sa/users')
   @UseGuards(BasicAuthGuard)
+  @ApiBasicAuth()
   @HttpCode(HttpStatus.OK)
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
   async getAllBySa(
     @Query() query: GetUsersQueryParams,
   ): Promise<PaginatedViewDto<UserViewDto[]>> {
@@ -98,7 +107,9 @@ export class UsersController {
 
   @Delete('sa/users/:id')
   @UseGuards(BasicAuthGuard)
+  @ApiBasicAuth()
   @HttpCode(HttpStatus.NO_CONTENT)
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
   async deleteBySa(@Param('id') id: string): Promise<void> {
     // return this.usersService.deleteUser(id);
     await this.commandBus.execute(new DeleteUserCommand({ id }));

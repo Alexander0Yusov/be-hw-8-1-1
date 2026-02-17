@@ -13,8 +13,26 @@ export class BasicAuthGuard extends AuthGuard('basic') {
     return super.canActivate(context);
   }
 
-  handleRequest<TUser = any>(err: any, user: TUser): TUser {
+  // extend signature to get access to ExecutionContext when available
+  handleRequest<TUser = any>(
+    err: any,
+    user: TUser,
+    info?: any,
+    status?: any,
+    context?: ExecutionContext,
+  ): TUser {
     if (err || !user) {
+      try {
+        if (context) {
+          const response = context.switchToHttp().getResponse();
+          if (response && typeof response.setHeader === 'function') {
+            response.setHeader('WWW-Authenticate', 'Basic realm="API"');
+          }
+        }
+      } catch (e) {
+        // ignore any errors while setting header
+      }
+
       throw (
         err ||
         new DomainException({

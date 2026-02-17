@@ -11,6 +11,7 @@ import {
   Query,
   UseGuards,
 } from '@nestjs/common';
+import { ApiResponse } from '@nestjs/swagger';
 import { BlogInputDto } from '../dto/blog/blog-input.dto';
 import { BlogViewDto } from '../dto/blog/blog-view.dto';
 import { CreateBlogCommand } from '../application/usecases/blogs/create-blog.usecase';
@@ -45,6 +46,7 @@ export class BloggersController {
 
   @Post()
   @UseGuards(JwtAuthGuard)
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
   async createNewBlog(
     @Body() dto: BlogInputDto,
     @ExtractUserFromRequest() user: UserContextDto,
@@ -58,6 +60,7 @@ export class BloggersController {
 
   @Get()
   @UseGuards(JwtAuthGuard)
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
   async getAllByUserId(
     @Query() query: GetBlogsQueryParams,
     @ExtractUserFromRequest() user: UserContextDto,
@@ -73,6 +76,7 @@ export class BloggersController {
   @Put(':id')
   @UseGuards(JwtAuthGuard)
   @HttpCode(HttpStatus.NO_CONTENT)
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
   async updateBlog(
     @Param('id') id: string,
     @ExtractUserFromRequest() user: UserContextDto,
@@ -84,6 +88,7 @@ export class BloggersController {
   @Delete(':id')
   @UseGuards(JwtAuthGuard)
   @HttpCode(HttpStatus.NO_CONTENT)
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
   async deleteBlog(
     @Param('id') id: string,
     @ExtractUserFromRequest() user: UserContextDto,
@@ -94,6 +99,7 @@ export class BloggersController {
   //
   @Post(':id/posts')
   @UseGuards(JwtAuthGuard)
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
   async createPost(
     @Param('id') id: string,
     @ExtractUserFromRequest() user: UserContextDto,
@@ -110,6 +116,7 @@ export class BloggersController {
 
   @Get(':id/posts')
   @UseGuards(JwtAuthGuard)
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
   async getAllPostsForUser(
     @Param('id') id: string,
     @ExtractUserFromRequest() user: UserContextDto,
@@ -123,6 +130,7 @@ export class BloggersController {
   @Put(':id/posts/:postId')
   @UseGuards(JwtAuthGuard)
   @HttpCode(HttpStatus.NO_CONTENT)
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
   async updatePost(
     @Param('id') id: string,
     @Param('postId') postId: string,
@@ -137,6 +145,7 @@ export class BloggersController {
   @Delete(':id/posts/:postId')
   @UseGuards(JwtAuthGuard)
   @HttpCode(HttpStatus.NO_CONTENT)
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
   async deletePost(
     @Param('id') id: string,
     @Param('postId') postId: string,
