@@ -104,6 +104,6 @@
     }
   },
   "_moduleAliases": {
-    "src": "dist"
+    "src": "."
   }
 }
