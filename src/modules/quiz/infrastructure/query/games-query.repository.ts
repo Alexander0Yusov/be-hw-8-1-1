@@ -4,9 +4,9 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Game } from '../../domain/game/game.entity';
 import { GameStatuses } from '../../dto/game-pair-quiz/answer-status';
 import { PostConnectionViewDto } from '../../dto/game-pair-quiz/post-connection-view.dto';
-import { PaginatedViewDto } from 'src/core/dto/base.paginated.view-dto';
 import { GetMyGamesQueryParams } from '../../dto/game-pair-quiz/get-my-games-query-params.input-dto';
 import { MyGamesSortField } from '../../dto/game-pair-quiz/my-games-sort-field';
+import { PaginatedViewDto } from '../../../../core/dto/base.paginated.view-dto';
 
 @Injectable()
 export class GamesQueryRepository {

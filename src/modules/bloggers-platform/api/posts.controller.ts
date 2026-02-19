@@ -26,27 +26,27 @@ import { PostsQueryRepository } from '../infrastructure/query/posts-query.reposi
 import { PostInputDto } from '../dto/post/post-iput.dto';
 import { PostViewDto } from '../dto/post/post-view.dto';
 import { GetPostsQueryParams } from '../dto/post/get-posts-query-params.input-dto';
-import { PaginatedViewDto } from 'src/core/dto/base.paginated.view-dto';
 import { CommentViewDto } from '../dto/comment/comment-view.dto';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { CommentInputDto } from '../dto/comment/comment-input.dto';
 import { CreateCommentCommand } from '../application/usecases/comments/create-comment.usecase';
-import { ExtractUserFromRequest } from 'src/modules/user-accounts/guards/decorators/param/extract-user-from-request.decorator';
-import { UserContextDto } from 'src/modules/user-accounts/guards/dto/user-context.dto';
-import { JwtAuthGuard } from 'src/modules/user-accounts/guards/bearer/jwt-auth.guard';
 import { CommentsQueryRepository } from '../infrastructure/query/comments-query.repository';
 import { LikeInputDto } from '../dto/like/like-input.dto';
 import { UpdatePostLikeStatusCommand } from '../application/usecases/posts/update-post-like-status.usecase';
-import { JwtOptionalAuthGuard } from 'src/modules/user-accounts/guards/bearer/jwt-optional-auth.guard';
-import { BasicAuthGuard } from 'src/modules/user-accounts/guards/basic/basi-auth.guard';
 import { CreatePostCommand } from '../application/usecases/posts/create-post.usecase';
-import { ExtractUserIfExistsFromRequest } from 'src/modules/user-accounts/guards/decorators/param/extract-user-if-exists-from-request.decorator';
 import { LikesQueryRepository } from '../infrastructure/query/likes-query.repository';
 import { postItemsGetsMyStatus } from '../application/mapers/post-items-gets-my-status';
 import { GetCommentsQueryParams } from '../dto/comment/get-comments-query-params.input-dto';
 import { commentItemsGetsMyStatus } from '../application/mapers/comment-items-gets-my-status';
 import { GetPostQuery } from '../application/usecases/posts/get-post.query-handler';
 import { SkipThrottle } from '@nestjs/throttler';
+import { BasicAuthGuard } from '../../user-accounts/guards/basic/basi-auth.guard';
+import { JwtOptionalAuthGuard } from '../../user-accounts/guards/bearer/jwt-optional-auth.guard';
+import { UserContextDto } from '../../user-accounts/guards/dto/user-context.dto';
+import { ExtractUserIfExistsFromRequest } from '../../user-accounts/guards/decorators/param/extract-user-if-exists-from-request.decorator';
+import { PaginatedViewDto } from '../../../core/dto/base.paginated.view-dto';
+import { JwtAuthGuard } from '../../user-accounts/guards/bearer/jwt-auth.guard';
+import { ExtractUserFromRequest } from '../../user-accounts/guards/decorators/param/extract-user-from-request.decorator';
 
 @ApiTags('Posts')
 @Controller('posts')

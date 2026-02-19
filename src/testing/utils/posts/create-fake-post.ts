@@ -1,4 +1,4 @@
-import { PostInputDto } from 'src/modules/bloggers-platform/dto/post/post-iput.dto';
+import { PostInputDto } from '../../../modules/bloggers-platform/dto/post/post-iput.dto';
 
 const testPostData: PostInputDto = {
   title: 'fake title',

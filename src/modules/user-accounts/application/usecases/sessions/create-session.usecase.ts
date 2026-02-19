@@ -1,12 +1,11 @@
 import { Inject } from '@nestjs/common';
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { JwtService } from '@nestjs/jwt';
-import { REFRESH_TOKEN_STRATEGY_INJECT_TOKEN } from 'src/modules/user-accounts/constants/auth-tokens.inject-constants';
-import { Session } from 'src/modules/user-accounts/domain/session/session.entity';
-import { CreateSessionDomainDto } from 'src/modules/user-accounts/dto/session/create-session-domain.dto';
-import { JwtRefreshPayload } from 'src/modules/user-accounts/dto/session/jwt-refresh-payload.dto';
-import { SessionInputDto } from 'src/modules/user-accounts/dto/session/session-input.dto';
-import { SessionsRepository } from 'src/modules/user-accounts/infrastructure/sessions.repository';
+import { SessionInputDto } from '../../../dto/session/session-input.dto';
+import { REFRESH_TOKEN_STRATEGY_INJECT_TOKEN } from '../../../constants/auth-tokens.inject-constants';
+import { SessionsRepository } from '../../../infrastructure/sessions.repository';
+import { JwtRefreshPayload } from '../../../dto/session/jwt-refresh-payload.dto';
+import { Session } from '../../../domain/session/session.entity';
 
 export class CreateSessionCommand {
   constructor(public dto: SessionInputDto) {}

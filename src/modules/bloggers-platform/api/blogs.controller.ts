@@ -15,12 +15,12 @@ import { PaginatedViewDto } from '../../../core/dto/base.paginated.view-dto';
 import { PostViewDto } from '../dto/post/post-view.dto';
 import { PostsQueryRepository } from '../infrastructure/query/posts-query.repository';
 import { GetPostsQueryParams } from '../dto/post/get-posts-query-params.input-dto';
-import { JwtOptionalAuthGuard } from 'src/modules/user-accounts/guards/bearer/jwt-optional-auth.guard';
 import { SkipThrottle } from '@nestjs/throttler';
-import { ExtractUserIfExistsFromRequest } from 'src/modules/user-accounts/guards/decorators/param/extract-user-if-exists-from-request.decorator';
-import { UserContextDto } from 'src/modules/user-accounts/guards/dto/user-context.dto';
 import { LikesQueryRepository } from '../infrastructure/query/likes-query.repository';
 import { postItemsGetsMyStatus } from '../application/mapers/post-items-gets-my-status';
+import { JwtOptionalAuthGuard } from '../../user-accounts/guards/bearer/jwt-optional-auth.guard';
+import { UserContextDto } from '../../user-accounts/guards/dto/user-context.dto';
+import { ExtractUserIfExistsFromRequest } from '../../user-accounts/guards/decorators/param/extract-user-if-exists-from-request.decorator';
 
 @ApiTags('Blogs')
 @Controller('blogs')

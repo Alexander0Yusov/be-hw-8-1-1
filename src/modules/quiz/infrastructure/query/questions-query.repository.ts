@@ -4,7 +4,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Question } from '../../domain/question/question.entity';
 import { QuestionViewDto } from '../../dto/question/question-view.dto';
 import { GetQuestionsQueryParams } from '../../dto/question/get-questions-query-params.input-dto';
-import { PaginatedViewDto } from 'src/core/dto/base.paginated.view-dto';
+import { PaginatedViewDto } from '../../../../core/dto/base.paginated.view-dto';
 
 @Injectable()
 export class QuestionsQueryRepository {

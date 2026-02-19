@@ -4,10 +4,9 @@ import {
   IQueryHandler,
   QueryHandler,
 } from '@nestjs/cqrs';
-import { LikeStatus } from 'src/modules/bloggers-platform/domain/like/like.entity';
-import { PostViewDto } from 'src/modules/bloggers-platform/dto/post/post-view.dto';
-import { LikesRepository } from 'src/modules/bloggers-platform/infrastructure/likes.repository';
-import { PostsQueryRepository } from 'src/modules/bloggers-platform/infrastructure/query/posts-query.repository';
+import { PostViewDto } from '../../../dto/post/post-view.dto';
+import { PostsQueryRepository } from '../../../infrastructure/query/posts-query.repository';
+import { LikesRepository } from '../../../infrastructure/likes.repository';
 
 export class GetPostQuery {
   constructor(

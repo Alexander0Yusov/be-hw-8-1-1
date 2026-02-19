@@ -1,8 +1,8 @@
 import { NotFoundException } from '@nestjs/common';
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
-import { GameStatuses } from 'src/modules/quiz/dto/game-pair-quiz/answer-status';
-import { PostConnectionViewDto } from 'src/modules/quiz/dto/game-pair-quiz/post-connection-view.dto';
-import { GamesQueryRepository } from 'src/modules/quiz/infrastructure/query/games-query.repository';
+import { PostConnectionViewDto } from '../../../dto/game-pair-quiz/post-connection-view.dto';
+import { GamesQueryRepository } from '../../../infrastructure/query/games-query.repository';
+import { GameStatuses } from '../../../dto/game-pair-quiz/answer-status';
 
 export class GetMyCurrentQuery {
   constructor(public userId: string) {}

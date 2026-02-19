@@ -8,9 +8,9 @@ import {
 } from 'typeorm';
 import { PlayerProgress } from '../player-progress/player-progress.entity';
 import { Question } from '../question/question.entity';
-import { BaseDomainEntity } from 'src/core/base-domain-entity/base-domain-entity';
 import { GameStatuses } from '../../dto/game-pair-quiz/answer-status';
 import { GameQuestion } from '../game-question/game-question.entity';
+import { BaseDomainEntity } from '../../../../core/base-domain-entity/base-domain-entity';
 
 @Entity()
 export class Game extends BaseDomainEntity {

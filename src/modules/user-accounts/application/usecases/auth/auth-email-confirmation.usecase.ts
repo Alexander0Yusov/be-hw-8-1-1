@@ -1,7 +1,7 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
-import { UsersRepository } from 'src/modules/user-accounts/infrastructure/users.repository';
-import { DomainException } from 'src/core/exceptions/domain-exceptions';
-import { DomainExceptionCode } from 'src/core/exceptions/domain-exception-codes';
+import { UsersRepository } from '../../../infrastructure/users.repository';
+import { DomainException } from '../../../../../core/exceptions/domain-exceptions';
+import { DomainExceptionCode } from '../../../../../core/exceptions/domain-exception-codes';
 
 export class AuthEmailConfirmationCommand {
   constructor(public body: { code: string }) {}

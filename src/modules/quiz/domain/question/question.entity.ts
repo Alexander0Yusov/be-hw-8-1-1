@@ -1,8 +1,8 @@
-import { BaseDomainEntity } from 'src/core/base-domain-entity/base-domain-entity';
 import { Column, Entity, OneToMany } from 'typeorm';
 import { QuestionInputDto } from '../../dto/question/question-input.dto';
 import { QuestionUpdateStatusDto } from '../../dto/question/question-update-status.dto';
 import { GameQuestion } from '../game-question/game-question.entity';
+import { BaseDomainEntity } from '../../../../core/base-domain-entity/base-domain-entity';
 
 @Entity()
 export class Question extends BaseDomainEntity {

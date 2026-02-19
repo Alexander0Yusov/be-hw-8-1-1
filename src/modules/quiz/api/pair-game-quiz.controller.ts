@@ -11,9 +11,6 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { ApiResponse } from '@nestjs/swagger';
-import { JwtAuthGuard } from 'src/modules/user-accounts/guards/bearer/jwt-auth.guard';
-import { ExtractUserFromRequest } from 'src/modules/user-accounts/guards/decorators/param/extract-user-from-request.decorator';
-import { UserContextDto } from 'src/modules/user-accounts/guards/dto/user-context.dto';
 import { PostConnectionViewDto } from '../dto/game-pair-quiz/post-connection-view.dto';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { GamesQueryRepository } from '../infrastructure/query/games-query.repository';
@@ -26,11 +23,14 @@ import { GetGameByIdQuery } from '../application/usecases/games/get-current-game
 import { StatisticViewDto } from '../dto/game-pair-quiz/statistic-view.dto';
 import { PlayerProgressQueryRepository } from '../infrastructure/query/player-progress-query.repository';
 import { ConnectOrCreatePairCommand } from '../application/usecases/games/connect-or-create-pair.usecase';
-import { PaginatedViewDto } from 'src/core/dto/base.paginated.view-dto';
 import { GetMyGamesQueryParams } from '../dto/game-pair-quiz/get-my-games-query-params.input-dto';
 import { GetTopStatisticQueryParams } from '../dto/game-pair-quiz/get-top-statistic-query-params.input-dto';
 import { StatisticTopViewDto } from '../dto/game-pair-quiz/statistic-top-view.dto';
 import { CheckUserDeadlineByIdAndFinalizeCommand } from '../application/usecases/games/check-user-deadline-by-id-and-finalize.usecase';
+import { JwtAuthGuard } from '../../user-accounts/guards/bearer/jwt-auth.guard';
+import { ExtractUserFromRequest } from '../../user-accounts/guards/decorators/param/extract-user-from-request.decorator';
+import { UserContextDto } from '../../user-accounts/guards/dto/user-context.dto';
+import { PaginatedViewDto } from '../../../core/dto/base.paginated.view-dto';
 
 @Controller('pair-game-quiz')
 export class PairGameQuizController {

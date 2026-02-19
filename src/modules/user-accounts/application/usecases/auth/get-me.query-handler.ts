@@ -1,7 +1,7 @@
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
-import { MeViewDto } from 'src/modules/user-accounts/dto/user/user-view.dto';
-import { UserContextDto } from 'src/modules/user-accounts/guards/dto/user-context.dto';
-import { UsersQueryRepository } from 'src/modules/user-accounts/infrastructure/query/users-query.repository';
+import { UserContextDto } from '../../../guards/dto/user-context.dto';
+import { MeViewDto } from '../../../dto/user/user-view.dto';
+import { UsersQueryRepository } from '../../../infrastructure/query/users-query.repository';
 
 export class GetMeQuery {
   constructor(public dto: UserContextDto) {}

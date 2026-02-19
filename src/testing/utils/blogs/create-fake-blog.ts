@@ -1,4 +1,4 @@
-import { BlogInputDto } from 'src/modules/bloggers-platform/dto/blog/blog-input.dto';
+import { BlogInputDto } from '../../../modules/bloggers-platform/dto/blog/blog-input.dto';
 
 const testBlogData: BlogInputDto = {
   name: 'blog 1',

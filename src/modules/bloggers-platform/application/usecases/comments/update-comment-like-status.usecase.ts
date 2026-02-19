@@ -1,10 +1,8 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
-import { DomainExceptionCode } from 'src/core/exceptions/domain-exception-codes';
-import { DomainException } from 'src/core/exceptions/domain-exceptions';
-import { ParentEntityType } from 'src/modules/bloggers-platform/domain/like/like.entity';
-import { LikeInputDto } from 'src/modules/bloggers-platform/dto/like/like-input.dto';
-import { CommentsRepository } from 'src/modules/bloggers-platform/infrastructure/comments.repository';
-import { LikesRepository } from 'src/modules/bloggers-platform/infrastructure/likes.repository';
+import { LikeInputDto } from '../../../dto/like/like-input.dto';
+import { CommentsRepository } from '../../../infrastructure/comments.repository';
+import { LikesRepository } from '../../../infrastructure/likes.repository';
+import { ParentEntityType } from '../../../domain/like/like.entity';
 
 export class UpdateCommentLikeStatusCommand {
   constructor(

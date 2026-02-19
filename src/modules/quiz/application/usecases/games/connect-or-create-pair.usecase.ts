@@ -1,14 +1,12 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DomainExceptionCode } from 'src/core/exceptions/domain-exception-codes';
-import { DomainException } from 'src/core/exceptions/domain-exceptions';
-import { Game } from 'src/modules/quiz/domain/game/game.entity';
-import { Question } from 'src/modules/quiz/domain/question/question.entity';
-import { GameStatuses } from 'src/modules/quiz/dto/game-pair-quiz/answer-status';
-import { QuestionInputDto } from 'src/modules/quiz/dto/question/question-input.dto';
-import { GamesRepository } from 'src/modules/quiz/infrastructure/games.repository';
-import { QuestionsRepository } from 'src/modules/quiz/infrastructure/questions.repository';
 import { Repository } from 'typeorm';
+import { GamesRepository } from '../../../infrastructure/games.repository';
+import { Question } from '../../../domain/question/question.entity';
+import { DomainException } from '../../../../../core/exceptions/domain-exceptions';
+import { DomainExceptionCode } from '../../../../../core/exceptions/domain-exception-codes';
+import { GameStatuses } from '../../../dto/game-pair-quiz/answer-status';
+import { Game } from '../../../domain/game/game.entity';
 
 export class ConnectOrCreatePairCommand {
   constructor(public userId: string) {}

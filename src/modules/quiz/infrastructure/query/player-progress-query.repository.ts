@@ -5,11 +5,9 @@ import {
   PlayerProgress,
   VictoryStatus,
 } from '../../domain/player-progress/player-progress.entity';
-import { GameStatuses } from '../../dto/game-pair-quiz/answer-status';
-import { StatisticViewDto } from '../../dto/game-pair-quiz/statistic-view.dto';
 import { GetTopStatisticQueryParams } from '../../dto/game-pair-quiz/get-top-statistic-query-params.input-dto';
 import { StatisticTopViewDto } from '../../dto/game-pair-quiz/statistic-top-view.dto';
-import { PaginatedViewDto } from 'src/core/dto/base.paginated.view-dto';
+import { PaginatedViewDto } from '../../../../core/dto/base.paginated.view-dto';
 
 @Injectable()
 export class PlayerProgressQueryRepository {

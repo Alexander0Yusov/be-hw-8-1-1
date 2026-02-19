@@ -1,4 +1,3 @@
-import { User } from 'src/modules/user-accounts/domain/user/user.entity';
 import {
   Column,
   Entity,
@@ -9,7 +8,8 @@ import {
 } from 'typeorm';
 import { Game } from '../game/game.entity';
 import { Answer } from '../answer/answer.entity';
-import { BaseDomainEntity } from 'src/core/base-domain-entity/base-domain-entity';
+import { BaseDomainEntity } from '../../../../core/base-domain-entity/base-domain-entity';
+import { User } from '../../../user-accounts/domain/user/user.entity';
 
 export enum VictoryStatus {
   Loss = 'Loss',

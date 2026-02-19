@@ -1,11 +1,10 @@
-import { CommentatorInfo } from './commentator-info';
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
-import { BaseDomainEntity } from 'src/core/base-domain-entity/base-domain-entity';
-import { User } from 'src/modules/user-accounts/domain/user/user.entity';
 import { Post } from '../post/post.entity';
 import { Like } from '../like/like.entity';
 import { CreateCommentDomainDto } from '../../dto/comment/create-comment-domain';
 import { CommentUpdateDto } from '../../dto/comment/comment-update.dto';
+import { BaseDomainEntity } from '../../../../core/base-domain-entity/base-domain-entity';
+import { User } from '../../../user-accounts/domain/user/user.entity';
 
 @Entity()
 export class Comment extends BaseDomainEntity {

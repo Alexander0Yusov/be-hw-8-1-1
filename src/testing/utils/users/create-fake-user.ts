@@ -1,4 +1,4 @@
-import { UserInputDto } from 'src/modules/user-accounts/dto/user/user-input.dto';
+import { UserInputDto } from '../../../modules/user-accounts/dto/user/user-input.dto';
 
 export const createFakeUser = (uniqueSymbol: string = 'x'): UserInputDto => {
   return {

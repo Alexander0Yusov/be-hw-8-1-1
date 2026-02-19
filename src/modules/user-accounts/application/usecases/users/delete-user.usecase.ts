@@ -1,6 +1,6 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
-import { UsersRepository } from 'src/modules/user-accounts/infrastructure/users.repository';
-import { UserContextDto } from 'src/modules/user-accounts/guards/dto/user-context.dto';
+import { UserContextDto } from '../../../guards/dto/user-context.dto';
+import { UsersRepository } from '../../../infrastructure/users.repository';
 
 export class DeleteUserCommand {
   constructor(public dto: UserContextDto) {}

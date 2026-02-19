@@ -1,10 +1,8 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
-import { Comment } from 'src/modules/bloggers-platform/domain/comment/comment.entity';
-import { CommentInputDto } from 'src/modules/bloggers-platform/dto/comment/comment-input.dto';
-import { CreateCommentDomainDto } from 'src/modules/bloggers-platform/dto/comment/create-comment-domain';
-import { CommentsRepository } from 'src/modules/bloggers-platform/infrastructure/comments.repository';
-import { PostsQueryRepository } from 'src/modules/bloggers-platform/infrastructure/query/posts-query.repository';
-import { UsersQueryRepository } from 'src/modules/user-accounts/infrastructure/query/users-query.repository';
+import { CommentInputDto } from '../../../dto/comment/comment-input.dto';
+import { CommentsRepository } from '../../../infrastructure/comments.repository';
+import { PostsQueryRepository } from '../../../infrastructure/query/posts-query.repository';
+import { Comment } from '../../../domain/comment/comment.entity';
 
 export class CreateCommentCommand {
   constructor(
@@ -21,7 +19,6 @@ export class CreateCommentUseCase
   constructor(
     private commentsRepository: CommentsRepository,
     private postsQueryRepository: PostsQueryRepository,
-    private usersQueryRepository: UsersQueryRepository,
   ) {}
 
   async execute({

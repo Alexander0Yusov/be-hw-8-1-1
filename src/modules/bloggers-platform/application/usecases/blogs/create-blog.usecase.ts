@@ -1,7 +1,7 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
-import { Blog } from 'src/modules/bloggers-platform/domain/blog/blog.entity';
-import { BlogInputDto } from 'src/modules/bloggers-platform/dto/blog/blog-input.dto';
-import { BlogsRepository } from 'src/modules/bloggers-platform/infrastructure/blogs.repository';
+import { BlogInputDto } from '../../../dto/blog/blog-input.dto';
+import { BlogsRepository } from '../../../infrastructure/blogs.repository';
+import { Blog } from '../../../domain/blog/blog.entity';
 
 export class CreateBlogCommand {
   constructor(

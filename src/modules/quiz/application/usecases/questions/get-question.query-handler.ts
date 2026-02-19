@@ -1,7 +1,6 @@
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
-
-import { QuestionViewDto } from 'src/modules/quiz/dto/question/question-view.dto';
-import { QuestionsQueryRepository } from 'src/modules/quiz/infrastructure/query/questions-query.repository';
+import { QuestionViewDto } from '../../../dto/question/question-view.dto';
+import { QuestionsQueryRepository } from '../../../infrastructure/query/questions-query.repository';
 
 export class GetQuestionQuery {
   constructor(public questionId: string) {}

@@ -1,5 +1,5 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
-import { SessionsRepository } from 'src/modules/user-accounts/infrastructure/sessions.repository';
+import { SessionsRepository } from '../../../infrastructure/sessions.repository';
 
 export class RevokingSessionCommand {
   constructor(public dto: { deviceId: string }) {}

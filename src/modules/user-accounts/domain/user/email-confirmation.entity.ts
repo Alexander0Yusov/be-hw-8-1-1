@@ -1,6 +1,6 @@
-import { BaseDomainEntity } from 'src/core/base-domain-entity/base-domain-entity';
 import { Column, Entity, JoinColumn, OneToOne } from 'typeorm';
 import { User } from './user.entity';
+import { BaseDomainEntity } from '../../../../core/base-domain-entity/base-domain-entity';
 
 @Entity()
 export class EmailConfirmation extends BaseDomainEntity {

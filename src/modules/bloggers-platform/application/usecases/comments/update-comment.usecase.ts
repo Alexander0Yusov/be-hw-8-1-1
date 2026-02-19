@@ -1,8 +1,8 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
-import { DomainExceptionCode } from 'src/core/exceptions/domain-exception-codes';
-import { DomainException } from 'src/core/exceptions/domain-exceptions';
-import { CommentUpdateDto } from 'src/modules/bloggers-platform/dto/comment/comment-update.dto';
-import { CommentsRepository } from 'src/modules/bloggers-platform/infrastructure/comments.repository';
+import { CommentUpdateDto } from '../../../dto/comment/comment-update.dto';
+import { CommentsRepository } from '../../../infrastructure/comments.repository';
+import { DomainException } from '../../../../../core/exceptions/domain-exceptions';
+import { DomainExceptionCode } from '../../../../../core/exceptions/domain-exception-codes';
 
 export class UpdateCommentCommand {
   constructor(

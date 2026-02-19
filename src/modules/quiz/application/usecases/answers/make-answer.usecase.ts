@@ -1,12 +1,12 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
-import { DomainExceptionCode } from 'src/core/exceptions/domain-exception-codes';
-import { DomainException } from 'src/core/exceptions/domain-exceptions';
-import { Answer } from 'src/modules/quiz/domain/answer/answer.entity';
-import { AnswerInputDto } from 'src/modules/quiz/dto/answer/answer-input.dto';
-import { AnswerStatuses } from 'src/modules/quiz/dto/game-pair-quiz/answer-status';
-import { AnswersRepository } from 'src/modules/quiz/infrastructure/answers.repository';
-import { GamesRepository } from 'src/modules/quiz/infrastructure/games.repository';
-import { PlayerProgressRepository } from 'src/modules/quiz/infrastructure/player-progress.repository';
+import { AnswerInputDto } from '../../../dto/answer/answer-input.dto';
+import { GamesRepository } from '../../../infrastructure/games.repository';
+import { AnswersRepository } from '../../../infrastructure/answers.repository';
+import { PlayerProgressRepository } from '../../../infrastructure/player-progress.repository';
+import { DomainException } from '../../../../../core/exceptions/domain-exceptions';
+import { DomainExceptionCode } from '../../../../../core/exceptions/domain-exception-codes';
+import { AnswerStatuses } from '../../../dto/game-pair-quiz/answer-status';
+import { Answer } from '../../../domain/answer/answer.entity';
 
 export class MakeAnswerCommand {
   constructor(

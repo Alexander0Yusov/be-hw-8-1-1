@@ -1,7 +1,7 @@
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
-import { SessionViewDto } from 'src/modules/user-accounts/dto/session/session-view.dto';
-import { UserContextDto } from 'src/modules/user-accounts/guards/dto/user-context.dto';
-import { SessionsQueryRepository } from 'src/modules/user-accounts/infrastructure/query/sessions-query.repository';
+import { UserContextDto } from '../../../guards/dto/user-context.dto';
+import { SessionViewDto } from '../../../dto/session/session-view.dto';
+import { SessionsQueryRepository } from '../../../infrastructure/query/sessions-query.repository';
 
 export class GetAllSessionsQuery {
   constructor(public dto: UserContextDto) {}

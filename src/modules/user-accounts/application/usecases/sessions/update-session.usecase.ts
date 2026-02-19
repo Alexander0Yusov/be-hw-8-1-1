@@ -1,9 +1,9 @@
 import { Inject } from '@nestjs/common';
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { JwtService } from '@nestjs/jwt';
-import { REFRESH_TOKEN_STRATEGY_INJECT_TOKEN } from 'src/modules/user-accounts/constants/auth-tokens.inject-constants';
-import { JwtRefreshPayload } from 'src/modules/user-accounts/dto/session/jwt-refresh-payload.dto';
-import { SessionsRepository } from 'src/modules/user-accounts/infrastructure/sessions.repository';
+import { REFRESH_TOKEN_STRATEGY_INJECT_TOKEN } from '../../../constants/auth-tokens.inject-constants';
+import { SessionsRepository } from '../../../infrastructure/sessions.repository';
+import { JwtRefreshPayload } from '../../../dto/session/jwt-refresh-payload.dto';
 
 export class UpdateSessionCommand {
   constructor(public dto: { refreshToken: string }) {}

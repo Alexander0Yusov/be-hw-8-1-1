@@ -1,7 +1,7 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
-import { DomainExceptionCode } from 'src/core/exceptions/domain-exception-codes';
-import { DomainException } from 'src/core/exceptions/domain-exceptions';
-import { BlogsRepository } from 'src/modules/bloggers-platform/infrastructure/blogs.repository';
+import { BlogsRepository } from '../../../infrastructure/blogs.repository';
+import { DomainException } from '../../../../../core/exceptions/domain-exceptions';
+import { DomainExceptionCode } from '../../../../../core/exceptions/domain-exception-codes';
 
 export class DeleteBlogCommand {
   constructor(

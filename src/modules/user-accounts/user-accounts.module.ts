@@ -18,7 +18,6 @@ import {
   ACCESS_TOKEN_STRATEGY_INJECT_TOKEN,
   REFRESH_TOKEN_STRATEGY_INJECT_TOKEN,
 } from './constants/auth-tokens.inject-constants';
-import { CoreConfig } from 'src/core/core.config';
 import { RefreshJwtStrategy } from './guards/bearer-refresh/refresh-jwt.strategy';
 import { SessionsRepository } from './infrastructure/sessions.repository';
 import { SessionsQueryRepository } from './infrastructure/query/sessions-query.repository';
@@ -42,6 +41,7 @@ import { User } from './domain/user/user.entity';
 import { EmailConfirmation } from './domain/user/email-confirmation.entity';
 import { PasswordRecovery } from './domain/user/password-recovery.entity';
 import { Session } from './domain/session/session.entity';
+import { CoreConfig } from '../../core/core.config';
 
 export const CommandHandlers = [
   CreateTokensPairUseCase,

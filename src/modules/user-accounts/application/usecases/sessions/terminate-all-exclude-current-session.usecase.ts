@@ -1,6 +1,6 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
-import { DeviceContextDto } from 'src/modules/user-accounts/guards/dto/device-context.dto';
-import { SessionsRepository } from 'src/modules/user-accounts/infrastructure/sessions.repository';
+import { DeviceContextDto } from '../../../guards/dto/device-context.dto';
+import { SessionsRepository } from '../../../infrastructure/sessions.repository';
 
 export class TerminateAllExcludeCurrentSessionCommand {
   constructor(public dto: DeviceContextDto) {}

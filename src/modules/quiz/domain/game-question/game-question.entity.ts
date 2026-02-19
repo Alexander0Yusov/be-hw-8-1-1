@@ -1,8 +1,8 @@
-import { BaseDomainEntity } from 'src/core/base-domain-entity/base-domain-entity';
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
 import { Game } from '../game/game.entity';
 import { Question } from '../question/question.entity';
 import { Answer } from '../answer/answer.entity';
+import { BaseDomainEntity } from '../../../../core/base-domain-entity/base-domain-entity';
 
 @Entity()
 export class GameQuestion extends BaseDomainEntity {

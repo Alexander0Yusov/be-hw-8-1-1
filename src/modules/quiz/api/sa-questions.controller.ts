@@ -12,7 +12,6 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
-import { BasicAuthGuard } from 'src/modules/user-accounts/guards/basic/basi-auth.guard';
 import { ApiBasicAuth, ApiResponse } from '@nestjs/swagger';
 import { QuestionInputDto } from '../dto/question/question-input.dto';
 import { CreateQuestionCommand } from '../application/usecases/questions/create-question.usecase';
@@ -22,9 +21,10 @@ import { UpdateQuestionCommand } from '../application/usecases/questions/update-
 import { QuestionUpdateStatusDto } from '../dto/question/question-update-status.dto';
 import { UpdateQuestionStatusCommand } from '../application/usecases/questions/update-question-status.usecase';
 import { DeleteQuestionCommand } from '../application/usecases/questions/delete-question.usecase';
-import { PaginatedViewDto } from 'src/core/dto/base.paginated.view-dto';
 import { QuestionsQueryRepository } from '../infrastructure/query/questions-query.repository';
 import { GetQuestionsQueryParams } from '../dto/question/get-questions-query-params.input-dto';
+import { BasicAuthGuard } from '../../user-accounts/guards/basic/basi-auth.guard';
+import { PaginatedViewDto } from '../../../core/dto/base.paginated.view-dto';
 
 @Controller('sa/quiz/questions')
 @ApiBasicAuth()

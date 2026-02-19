@@ -1,4 +1,4 @@
-import { BaseDomainEntity } from 'src/core/base-domain-entity/base-domain-entity';
+import { BaseDomainEntity } from '../../../../core/base-domain-entity/base-domain-entity';
 import { User } from './user.entity';
 import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
 

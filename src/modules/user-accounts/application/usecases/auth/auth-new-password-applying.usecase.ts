@@ -1,7 +1,7 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
-import { UsersRepository } from 'src/modules/user-accounts/infrastructure/users.repository';
 import { CryptoService } from '../../crupto.service';
-import { PasswordRecoveryDto } from 'src/modules/user-accounts/dto/user/password-recovery.dto';
+import { PasswordRecoveryDto } from '../../../dto/user/password-recovery.dto';
+import { UsersRepository } from '../../../infrastructure/users.repository';
 
 export class AuthNewPasswordApplyingCommand {
   constructor(public dto: PasswordRecoveryDto) {}

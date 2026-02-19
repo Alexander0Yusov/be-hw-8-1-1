@@ -1,16 +1,9 @@
-import {
-  Column,
-  Entity,
-  JoinColumn,
-  ManyToOne,
-  OneToOne,
-  Unique,
-} from 'typeorm';
-import { LikeForArrayViewDto } from '../../dto/like/like-for-array-view.dto';
+import { Column, Entity, JoinColumn, ManyToOne, Unique } from 'typeorm';
+
 import { Post } from '../post/post.entity';
 import { Comment } from '../comment/comment.entity';
-import { BaseDomainEntity } from 'src/core/base-domain-entity/base-domain-entity';
-import { User } from 'src/modules/user-accounts/domain/user/user.entity';
+import { BaseDomainEntity } from '../../../../core/base-domain-entity/base-domain-entity';
+import { User } from '../../../user-accounts/domain/user/user.entity';
 
 export enum LikeStatus {
   Like = 'Like',

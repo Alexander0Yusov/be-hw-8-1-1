@@ -1,9 +1,9 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
-import { Answer } from 'src/modules/quiz/domain/answer/answer.entity';
-import { AnswerStatuses } from 'src/modules/quiz/dto/game-pair-quiz/answer-status';
-import { AnswersRepository } from 'src/modules/quiz/infrastructure/answers.repository';
-import { GamesRepository } from 'src/modules/quiz/infrastructure/games.repository';
-import { PlayerProgressRepository } from 'src/modules/quiz/infrastructure/player-progress.repository';
+import { GamesRepository } from '../../../infrastructure/games.repository';
+import { AnswersRepository } from '../../../infrastructure/answers.repository';
+import { PlayerProgressRepository } from '../../../infrastructure/player-progress.repository';
+import { Answer } from '../../../domain/answer/answer.entity';
+import { AnswerStatuses } from '../../../dto/game-pair-quiz/answer-status';
 
 export class CheckUserDeadlineByIdAndFinalizeCommand {
   constructor(public userId: string) {}

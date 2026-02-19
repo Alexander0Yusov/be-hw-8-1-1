@@ -19,17 +19,16 @@ import {
 import { CommentUpdateDto } from '../dto/comment/comment-update.dto';
 import { CommandBus } from '@nestjs/cqrs';
 import { UpdateCommentCommand } from '../application/usecases/comments/update-comment.usecase';
-import { JwtAuthGuard } from 'src/modules/user-accounts/guards/bearer/jwt-auth.guard';
-import { UserContextDto } from 'src/modules/user-accounts/guards/dto/user-context.dto';
-import { ExtractUserFromRequest } from 'src/modules/user-accounts/guards/decorators/param/extract-user-from-request.decorator';
 import { LikeInputDto } from '../dto/like/like-input.dto';
 import { UpdateCommentLikeStatusCommand } from '../application/usecases/comments/update-comment-like-status.usecase';
 import { DeleteCommentCommand } from '../application/usecases/comments/delete-comment.usecase';
-import { JwtOptionalAuthGuard } from 'src/modules/user-accounts/guards/bearer/jwt-optional-auth.guard';
-import { ExtractUserIfExistsFromRequest } from 'src/modules/user-accounts/guards/decorators/param/extract-user-if-exists-from-request.decorator';
 import { GetCommentCommand } from '../application/usecases/comments/get-comment.usecase';
 import { SkipThrottle } from '@nestjs/throttler';
-import e from 'express';
+import { JwtAuthGuard } from '../../user-accounts/guards/bearer/jwt-auth.guard';
+import { ExtractUserFromRequest } from '../../user-accounts/guards/decorators/param/extract-user-from-request.decorator';
+import { UserContextDto } from '../../user-accounts/guards/dto/user-context.dto';
+import { JwtOptionalAuthGuard } from '../../user-accounts/guards/bearer/jwt-optional-auth.guard';
+import { ExtractUserIfExistsFromRequest } from '../../user-accounts/guards/decorators/param/extract-user-if-exists-from-request.decorator';
 
 @Controller('comments')
 @SkipThrottle()

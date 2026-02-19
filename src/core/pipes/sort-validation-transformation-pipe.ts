@@ -1,6 +1,6 @@
 import { BadRequestException, Injectable, PipeTransform } from '@nestjs/common';
-import { AllStatisticsSortField } from 'src/modules/quiz/dto/game-pair-quiz/get-top-statistic-query-params.input-dto';
 import { SortDirection } from '../dto/base.query-params.input-dto';
+import { AllStatisticsSortField } from '../../modules/quiz/dto/game-pair-quiz/get-top-statistic-query-params.input-dto';
 
 const ALLOWED_SORT_FIELDS = Object.values(AllStatisticsSortField);
 const ALLOWED_SORT_DIRECTIONS = Object.values(SortDirection);

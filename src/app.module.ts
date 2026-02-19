@@ -32,12 +32,12 @@ import { QuizModule } from './modules/quiz/quiz.module';
           username: coreConfig.postgresUser,
           password: coreConfig.postgresPassword,
           database: coreConfig.postgresDatabase,
-          ssl: true,
-          extra: {
-            ssl: {
-              rejectUnauthorized: false,
-            },
-          },
+          // ssl: true,
+          // extra: {
+          //   ssl: {
+          //     rejectUnauthorized: false,
+          //   },
+          // },
           // entities: [__dirname + '/../**/*.entity.{ts,js}'], // либо поштучно перчислить каждую сущность
           synchronize: true, // ❗ Только для разработки
           autoLoadEntities: true,

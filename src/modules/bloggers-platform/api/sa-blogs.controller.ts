@@ -13,14 +13,12 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { BlogsQueryRepository } from '../infrastructure/query/blogs-query.repository';
-import { BasicAuthGuard } from 'src/modules/user-accounts/guards/basic/basi-auth.guard';
 import { ApiBasicAuth, ApiResponse } from '@nestjs/swagger';
 import { BlogInputDto } from '../dto/blog/blog-input.dto';
 import { BlogViewDto } from '../dto/blog/blog-view.dto';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { CreateBlogCommand } from '../application/usecases/blogs/create-blog.usecase';
 import { GetBlogsQueryParams } from '../dto/blog/get-blogs-query-params.input-dto';
-import { PaginatedViewDto } from 'src/core/dto/base.paginated.view-dto';
 import { BlogUpdateDto } from '../dto/blog/blog-update.dto';
 import { UpdateBlogCommand } from '../application/usecases/blogs/update-blog.usecase';
 import { DeleteBlogCommand } from '../application/usecases/blogs/delete-blog.usecase';
@@ -35,6 +33,8 @@ import { SkipThrottle } from '@nestjs/throttler';
 import { PostViewDto } from '../dto/post/post-view.dto';
 import { UpdateBlogBindingWithUserCommand } from '../application/usecases/blogs/update-blog-binding-with-user.usecase';
 import { BlogViewSaDto } from '../dto/blog/blog-view-sa.dto';
+import { BasicAuthGuard } from '../../user-accounts/guards/basic/basi-auth.guard';
+import { PaginatedViewDto } from '../../../core/dto/base.paginated.view-dto';
 
 @Controller('sa/blogs')
 @SkipThrottle()

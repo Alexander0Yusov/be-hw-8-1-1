@@ -1,9 +1,9 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
-import { DomainExceptionCode } from 'src/core/exceptions/domain-exception-codes';
-import { DomainException } from 'src/core/exceptions/domain-exceptions';
-import { PostUpdateDto } from 'src/modules/bloggers-platform/dto/post/post-update.dto';
-import { BlogsRepository } from 'src/modules/bloggers-platform/infrastructure/blogs.repository';
-import { PostsRepository } from 'src/modules/bloggers-platform/infrastructure/posts.repository';
+import { PostUpdateDto } from '../../../dto/post/post-update.dto';
+import { BlogsRepository } from '../../../infrastructure/blogs.repository';
+import { PostsRepository } from '../../../infrastructure/posts.repository';
+import { DomainException } from '../../../../../core/exceptions/domain-exceptions';
+import { DomainExceptionCode } from '../../../../../core/exceptions/domain-exception-codes';
 
 export class UpdatePostCommand {
   constructor(

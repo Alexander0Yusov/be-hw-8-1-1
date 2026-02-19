@@ -1,12 +1,12 @@
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
-import { PaginatedViewDto } from 'src/core/dto/base.paginated.view-dto';
-import { DomainExceptionCode } from 'src/core/exceptions/domain-exception-codes';
-import { DomainException } from 'src/core/exceptions/domain-exceptions';
-import { GetPostsQueryParams } from 'src/modules/bloggers-platform/dto/post/get-posts-query-params.input-dto';
-import { PostViewDto } from 'src/modules/bloggers-platform/dto/post/post-view.dto';
-import { BlogsRepository } from 'src/modules/bloggers-platform/infrastructure/blogs.repository';
-import { BlogsQueryRepository } from 'src/modules/bloggers-platform/infrastructure/query/blogs-query.repository';
-import { PostsQueryRepository } from 'src/modules/bloggers-platform/infrastructure/query/posts-query.repository';
+import { GetPostsQueryParams } from '../../../dto/post/get-posts-query-params.input-dto';
+import { PaginatedViewDto } from '../../../../../core/dto/base.paginated.view-dto';
+import { PostViewDto } from '../../../dto/post/post-view.dto';
+import { BlogsRepository } from '../../../infrastructure/blogs.repository';
+import { PostsQueryRepository } from '../../../infrastructure/query/posts-query.repository';
+import { BlogsQueryRepository } from '../../../infrastructure/query/blogs-query.repository';
+import { DomainException } from '../../../../../core/exceptions/domain-exceptions';
+import { DomainExceptionCode } from '../../../../../core/exceptions/domain-exception-codes';
 
 export class GetPostsByBlogIdQuery {
   constructor(

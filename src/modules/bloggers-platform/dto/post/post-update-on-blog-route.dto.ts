@@ -1,5 +1,5 @@
 import { IsNotEmpty, IsString, MaxLength } from 'class-validator';
-import { Trim } from 'src/core/decorators/transform/trim';
+import { Trim } from '../../../../core/decorators/transform/trim';
 
 export class PostUpdateOnBlogRouteDto {
   @IsString()

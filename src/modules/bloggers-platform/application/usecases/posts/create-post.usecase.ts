@@ -1,9 +1,9 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
-import { DomainExceptionCode } from 'src/core/exceptions/domain-exception-codes';
-import { DomainException } from 'src/core/exceptions/domain-exceptions';
-import { Post } from 'src/modules/bloggers-platform/domain/post/post.entity';
-import { BlogsRepository } from 'src/modules/bloggers-platform/infrastructure/blogs.repository';
-import { PostsRepository } from 'src/modules/bloggers-platform/infrastructure/posts.repository';
+import { PostsRepository } from '../../../infrastructure/posts.repository';
+import { BlogsRepository } from '../../../infrastructure/blogs.repository';
+import { Post } from '../../../domain/post/post.entity';
+import { DomainException } from '../../../../../core/exceptions/domain-exceptions';
+import { DomainExceptionCode } from '../../../../../core/exceptions/domain-exception-codes';
 
 export class PostCreateForBlogDto {
   title: string;

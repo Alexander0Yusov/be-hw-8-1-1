@@ -1,4 +1,3 @@
-import 'module-alias/register';
 import { NestFactory } from '@nestjs/core';
 import { appSetup } from './setup/app.setup';
 import { initAppModule } from './init-app-module';

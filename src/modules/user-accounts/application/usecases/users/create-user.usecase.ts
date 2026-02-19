@@ -1,10 +1,10 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
-import { UserInputDto } from 'src/modules/user-accounts/dto/user/user-input.dto';
-import { UsersRepository } from 'src/modules/user-accounts/infrastructure/users.repository';
 import { CryptoService } from '../../crupto.service';
-import { DomainException } from 'src/core/exceptions/domain-exceptions';
-import { DomainExceptionCode } from 'src/core/exceptions/domain-exception-codes';
-import { User } from 'src/modules/user-accounts/domain/user/user.entity';
+import { UserInputDto } from '../../../dto/user/user-input.dto';
+import { UsersRepository } from '../../../infrastructure/users.repository';
+import { DomainException } from '../../../../../core/exceptions/domain-exceptions';
+import { DomainExceptionCode } from '../../../../../core/exceptions/domain-exception-codes';
+import { User } from '../../../domain/user/user.entity';
 
 export class CreateUserCommand {
   constructor(public dto: UserInputDto) {}

@@ -1,6 +1,6 @@
 import { IsNotEmpty, IsString, MaxLength } from 'class-validator';
-import { Trim } from 'src/core/decorators/transform/trim';
 import { ApiProperty } from '@nestjs/swagger';
+import { Trim } from '../../../../core/decorators/transform/trim';
 
 export class PostInputDto {
   @ApiProperty({

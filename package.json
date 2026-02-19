@@ -40,7 +40,6 @@
     "cookie-parser": "^1.4.7",
     "date-fns": "^4.1.0",
     "jsonwebtoken": "^9.0.2",
-    "module-alias": "^2.3.4",
     "nodemailer": "^7.0.9",
     "passport": "^0.7.0",
     "passport-http": "^0.3.0",
@@ -102,8 +101,5 @@
     "moduleNameMapper": {
       "^src/(.*)$": "<rootDir>/$1"
     }
-  },
-  "_moduleAliases": {
-    "src": "."
   }
 }

@@ -1,12 +1,10 @@
-import { CreatePostDomainDto } from '../../dto/post/create-post-domain.dto';
 import { PostUpdateDto } from '../../dto/post/post-update.dto';
-import { LikeForArrayViewDto } from '../../dto/like/like-for-array-view.dto';
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
-import { BaseDomainEntity } from 'src/core/base-domain-entity/base-domain-entity';
 import { Blog } from '../blog/blog.entity';
 import { PostInputDto } from '../../dto/post/post-iput.dto';
 import { Comment } from '../comment/comment.entity';
 import { Like } from '../like/like.entity';
+import { BaseDomainEntity } from '../../../../core/base-domain-entity/base-domain-entity';
 
 @Entity()
 export class Post extends BaseDomainEntity {

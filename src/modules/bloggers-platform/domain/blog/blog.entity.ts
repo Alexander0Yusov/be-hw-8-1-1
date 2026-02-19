@@ -1,8 +1,8 @@
-import { BaseDomainEntity } from 'src/core/base-domain-entity/base-domain-entity';
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
 import { Post } from '../post/post.entity';
 import { BlogInputDto } from '../../dto/blog/blog-input.dto';
-import { User } from 'src/modules/user-accounts/domain/user/user.entity';
+import { BaseDomainEntity } from '../../../../core/base-domain-entity/base-domain-entity';
+import { User } from '../../../user-accounts/domain/user/user.entity';
 
 @Entity()
 export class Blog extends BaseDomainEntity {

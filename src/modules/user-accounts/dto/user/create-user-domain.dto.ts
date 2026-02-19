@@ -1,6 +1,5 @@
-import { IsEmail, IsString, Matches } from 'class-validator';
-import { emailConstraints } from '../../domain/user/user.entity';
-import { Trim } from 'src/core/decorators/transform/trim';
+import { IsEmail, IsString } from 'class-validator';
+import { Trim } from '../../../../core/decorators/transform/trim';
 
 export class CreateUserDomainDto {
   login: string;

@@ -17,11 +17,7 @@ import { BlogViewDto } from '../dto/blog/blog-view.dto';
 import { CreateBlogCommand } from '../application/usecases/blogs/create-blog.usecase';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { BlogsQueryRepository } from '../infrastructure/query/blogs-query.repository';
-import { JwtAuthGuard } from 'src/modules/user-accounts/guards/bearer/jwt-auth.guard';
 import { GetBlogsQueryParams } from '../dto/blog/get-blogs-query-params.input-dto';
-import { PaginatedViewDto } from 'src/core/dto/base.paginated.view-dto';
-import { ExtractUserFromRequest } from 'src/modules/user-accounts/guards/decorators/param/extract-user-from-request.decorator';
-import { UserContextDto } from 'src/modules/user-accounts/guards/dto/user-context.dto';
 import { BlogUpdateDto } from '../dto/blog/blog-update.dto';
 import { UpdateBlogCommand } from '../application/usecases/blogs/update-blog.usecase';
 import { DeleteBlogCommand } from '../application/usecases/blogs/delete-blog.usecase';
@@ -33,6 +29,10 @@ import { GetPostsByBlogIdQuery } from '../application/usecases/posts/get-posts-b
 import { GetPostsQueryParams } from '../dto/post/get-posts-query-params.input-dto';
 import { UpdatePostCommand } from '../application/usecases/posts/update-post.usecase';
 import { DeletePostCommand } from '../application/usecases/posts/delete-post.usecase';
+import { JwtAuthGuard } from '../../user-accounts/guards/bearer/jwt-auth.guard';
+import { UserContextDto } from '../../user-accounts/guards/dto/user-context.dto';
+import { ExtractUserFromRequest } from '../../user-accounts/guards/decorators/param/extract-user-from-request.decorator';
+import { PaginatedViewDto } from '../../../core/dto/base.paginated.view-dto';
 
 @Controller('blogger/blogs')
 export class BloggersController {

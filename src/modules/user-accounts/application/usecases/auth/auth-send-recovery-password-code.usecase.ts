@@ -1,9 +1,9 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
-import { EmailService } from 'src/modules/mailer/email.service';
 import { v4 as uuidv4 } from 'uuid';
 import { addDays } from 'date-fns';
-import { UsersRepository } from 'src/modules/user-accounts/infrastructure/users.repository';
-import { UpdateUserDto } from 'src/modules/user-accounts/dto/user/create-user-domain.dto';
+import { UpdateUserDto } from '../../../dto/user/create-user-domain.dto';
+import { EmailService } from '../../../../mailer/email.service';
+import { UsersRepository } from '../../../infrastructure/users.repository';
 
 export class AuthSendRecoveryPasswordCodeCommand {
   constructor(public dto: UpdateUserDto) {}

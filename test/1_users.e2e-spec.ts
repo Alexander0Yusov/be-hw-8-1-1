@@ -1,9 +1,9 @@
 import { INestApplication, HttpStatus } from '@nestjs/common';
 import request from 'supertest';
 import { deleteAllData } from './helpers/delete-all-data';
-import { createFakeUser } from 'src/testing/utils/users/create-fake-user';
-import { GLOBAL_PREFIX } from 'src/setup/global-prefix.setup';
 import { initTestApp } from './helpers/init-test-app';
+import { GLOBAL_PREFIX } from '../src/setup/global-prefix.setup';
+import { createFakeUser } from '../src/testing/utils/users/create-fake-user';
 
 describe('users (e2e)', () => {
   let app: INestApplication;

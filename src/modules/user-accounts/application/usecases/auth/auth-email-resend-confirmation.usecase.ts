@@ -1,10 +1,10 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
-import { UsersRepository } from 'src/modules/user-accounts/infrastructure/users.repository';
-import { DomainException } from 'src/core/exceptions/domain-exceptions';
-import { DomainExceptionCode } from 'src/core/exceptions/domain-exception-codes';
 import { v4 as uuidv4 } from 'uuid';
 import { addDays } from 'date-fns';
-import { EmailService } from 'src/modules/mailer/email.service';
+import { UsersRepository } from '../../../infrastructure/users.repository';
+import { EmailService } from '../../../../mailer/email.service';
+import { DomainException } from '../../../../../core/exceptions/domain-exceptions';
+import { DomainExceptionCode } from '../../../../../core/exceptions/domain-exception-codes';
 
 export class AuthEmailResendConfirmationCommand {
   constructor(public body: { email: string }) {}

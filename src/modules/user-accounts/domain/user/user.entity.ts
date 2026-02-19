@@ -3,14 +3,14 @@ import { addDays } from 'date-fns';
 import { v4 as uuidv4 } from 'uuid';
 
 import { Column, Entity, OneToMany, OneToOne } from 'typeorm';
-import { BaseDomainEntity } from 'src/core/base-domain-entity/base-domain-entity';
 import { EmailConfirmation } from './email-confirmation.entity';
 import { PasswordRecovery } from './password-recovery.entity';
 import { Session } from '../session/session.entity';
-import { Comment } from 'src/modules/bloggers-platform/domain/comment/comment.entity';
-import { Like } from 'src/modules/bloggers-platform/domain/like/like.entity';
-import { PlayerProgress } from 'src/modules/quiz/domain/player-progress/player-progress.entity';
-import { Blog } from 'src/modules/bloggers-platform/domain/blog/blog.entity';
+import { Comment } from '../../../bloggers-platform/domain/comment/comment.entity';
+import { BaseDomainEntity } from '../../../../core/base-domain-entity/base-domain-entity';
+import { Like } from '../../../bloggers-platform/domain/like/like.entity';
+import { Blog } from '../../../bloggers-platform/domain/blog/blog.entity';
+import { PlayerProgress } from '../../../quiz/domain/player-progress/player-progress.entity';
 
 export const loginConstraints = {
   minLength: 3,

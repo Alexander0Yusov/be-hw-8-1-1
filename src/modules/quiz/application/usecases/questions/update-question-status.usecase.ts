@@ -1,6 +1,6 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
-import { QuestionUpdateStatusDto } from 'src/modules/quiz/dto/question/question-update-status.dto';
-import { QuestionsRepository } from 'src/modules/quiz/infrastructure/questions.repository';
+import { QuestionUpdateStatusDto } from '../../../dto/question/question-update-status.dto';
+import { QuestionsRepository } from '../../../infrastructure/questions.repository';
 
 export class UpdateQuestionStatusCommand {
   constructor(
