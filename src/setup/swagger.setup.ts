@@ -20,6 +20,14 @@ export function swaggerSetup(app: INestApplication) {
 
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup(GLOBAL_PREFIX, app, document, {
-    customSiteTitle: 'Blogger Swagger',
+    customSiteTitle: 'Blogger platform API',
+    customfavIcon: 'https://swagger.io/favicon.png',
+    customJs: [
+      'https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.15.5/swagger-ui-bundle.min.js',
+      'https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.15.5/swagger-ui-standalone-preset.min.js',
+    ],
+    customCssUrl: [
+      'https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.15.5/swagger-ui.min.css',
+    ],
   });
 }
