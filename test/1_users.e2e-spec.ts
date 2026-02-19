@@ -4,6 +4,7 @@ import { deleteAllData } from './helpers/delete-all-data';
 import { initTestApp } from './helpers/init-test-app';
 import { GLOBAL_PREFIX } from '../src/setup/global-prefix.setup';
 import { createFakeUser } from '../src/testing/utils/users/create-fake-user';
+import { createFakeBlog } from '../src/testing/utils/blogs/create-fake-blog';
 
 describe('users (e2e)', () => {
   let app: INestApplication;
@@ -350,5 +351,36 @@ describe('users (e2e)', () => {
         `/${GLOBAL_PREFIX}/pair-game-quiz/users/top?sort=avgScores desc&sort=sumScore desc`,
       )
       .expect(HttpStatus.OK);
+  });
+
+  it('should make blog - post - comment - like flow', async () => {
+    const createdBlog = await request(app.getHttpServer())
+      .post(`/${GLOBAL_PREFIX}/blogger/blogs`)
+      .send(createFakeBlog())
+      .auth(accessToken_1, { type: 'bearer' })
+      .expect(HttpStatus.CREATED);
+
+    const createdPost = await request(app.getHttpServer())
+      .post(`/${GLOBAL_PREFIX}/blogger/blogs/${createdBlog.body.id}/posts`)
+      .send({
+        title: 'fake title',
+        shortDescription: 'fake description',
+        content: 'fake content',
+        blogId: createdBlog.body.id,
+      })
+      .auth(accessToken_1, { type: 'bearer' })
+      .expect(HttpStatus.CREATED);
+
+    const createdComment = await request(app.getHttpServer())
+      .post(`/${GLOBAL_PREFIX}/posts/${createdPost.body.id}/comments`)
+      .send({ content: 'a'.repeat(25) })
+      .auth(accessToken_1, { type: 'bearer' })
+      .expect(HttpStatus.CREATED);
+
+    await request(app.getHttpServer())
+      .put(`/${GLOBAL_PREFIX}/comments/${createdComment.body.id}/like-status`)
+      .send({ likeStatus: 'Like' })
+      .auth(accessToken_1, { type: 'bearer' })
+      .expect(HttpStatus.NO_CONTENT);
   });
 });
