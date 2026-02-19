@@ -1,3 +1,4 @@
+import 'tsconfig-paths/register';
 import { NestFactory } from '@nestjs/core';
 import { appSetup } from './setup/app.setup';
 import { initAppModule } from './init-app-module';
