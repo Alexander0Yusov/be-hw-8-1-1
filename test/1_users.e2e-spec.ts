@@ -13,6 +13,7 @@ describe('users (e2e)', () => {
     // нужно вот так настроенное прил, те с учетом
     // динамического добавления тест модуля
     app = await initTestApp();
+    await deleteAllData(app);
   });
 
   beforeEach(async () => {
@@ -20,7 +21,7 @@ describe('users (e2e)', () => {
   });
 
   afterAll(async () => {
-    await deleteAllData(app);
+    // await deleteAllData(app);
     await app.close();
   });
 
@@ -370,6 +371,12 @@ describe('users (e2e)', () => {
       })
       .auth(accessToken_1, { type: 'bearer' })
       .expect(HttpStatus.CREATED);
+
+    await request(app.getHttpServer())
+      .put(`/${GLOBAL_PREFIX}/posts/${createdPost.body.id}/like-status`)
+      .send({ likeStatus: 'Dislike' })
+      .auth(accessToken_1, { type: 'bearer' })
+      .expect(HttpStatus.NO_CONTENT);
 
     const createdComment = await request(app.getHttpServer())
       .post(`/${GLOBAL_PREFIX}/posts/${createdPost.body.id}/comments`)
