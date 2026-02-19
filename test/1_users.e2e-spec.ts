@@ -1,8 +1,5 @@
-import { Test } from '@nestjs/testing';
 import { INestApplication, HttpStatus } from '@nestjs/common';
 import request from 'supertest';
-import { AppModule } from '../src/app.module';
-import { appSetup } from '../src/setup/app.setup';
 import { deleteAllData } from './helpers/delete-all-data';
 import { createFakeUser } from 'src/testing/utils/users/create-fake-user';
 import { GLOBAL_PREFIX } from 'src/setup/global-prefix.setup';
