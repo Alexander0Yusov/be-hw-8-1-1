@@ -13,7 +13,13 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { BlogsQueryRepository } from '../infrastructure/query/blogs-query.repository';
-import { ApiBasicAuth, ApiResponse } from '@nestjs/swagger';
+import {
+  ApiBasicAuth,
+  ApiOperation,
+  ApiParam,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { BlogInputDto } from '../dto/blog/blog-input.dto';
 import { BlogViewDto } from '../dto/blog/blog-view.dto';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
@@ -40,6 +46,7 @@ import { PaginatedViewDto } from '../../../core/dto/base.paginated.view-dto';
 @SkipThrottle()
 @UseGuards(BasicAuthGuard)
 @ApiBasicAuth()
+@ApiTags('SA Blogs')
 export class SaBlogsController {
   constructor(
     private commandBus: CommandBus,
@@ -49,7 +56,17 @@ export class SaBlogsController {
   ) {}
 
   @Post()
-  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiOperation({ summary: 'Create blog (SA)' })
+  @ApiResponse({ status: 201, description: 'Blog created', type: BlogViewDto })
+  @ApiResponse({
+    status: 401,
+    description: 'Unauthorized',
+    schema: {
+      type: 'object',
+      properties: { message: { type: 'string', example: 'Unauthorized' } },
+      example: { message: 'Unauthorized' },
+    },
+  })
   async createBySa(@Body() dto: BlogInputDto): Promise<BlogViewDto> {
     const blogId = await this.commandBus.execute(new CreateBlogCommand(dto));
     return this.blogsQueryRepository.findByIdOrNotFoundFail(blogId);
@@ -57,7 +74,17 @@ export class SaBlogsController {
 
   @Get()
   @HttpCode(HttpStatus.OK)
-  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiOperation({ summary: 'Get all blogs (SA)' })
+  @ApiResponse({ status: 200, description: 'Blogs returned' })
+  @ApiResponse({
+    status: 401,
+    description: 'Unauthorized',
+    schema: {
+      type: 'object',
+      properties: { message: { type: 'string', example: 'Unauthorized' } },
+      example: { message: 'Unauthorized' },
+    },
+  })
   async getAllBySa(
     @Query() query: GetBlogsQueryParams,
   ): Promise<PaginatedViewDto<BlogViewSaDto[]>> {
@@ -66,7 +93,18 @@ export class SaBlogsController {
 
   @Put(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
-  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiOperation({ summary: 'Update blog by id (SA)' })
+  @ApiParam({ name: 'id', type: String, description: 'Blog id' })
+  @ApiResponse({ status: 204, description: 'Blog updated' })
+  @ApiResponse({
+    status: 401,
+    description: 'Unauthorized',
+    schema: {
+      type: 'object',
+      properties: { message: { type: 'string', example: 'Unauthorized' } },
+      example: { message: 'Unauthorized' },
+    },
+  })
   async updateBlogBySa(
     @Param('id') id: string,
     @Body() body: BlogUpdateDto,
@@ -76,14 +114,36 @@ export class SaBlogsController {
 
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
-  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiOperation({ summary: 'Delete blog by id (SA)' })
+  @ApiParam({ name: 'id', type: String, description: 'Blog id' })
+  @ApiResponse({ status: 204, description: 'Blog deleted' })
+  @ApiResponse({
+    status: 401,
+    description: 'Unauthorized',
+    schema: {
+      type: 'object',
+      properties: { message: { type: 'string', example: 'Unauthorized' } },
+      example: { message: 'Unauthorized' },
+    },
+  })
   async deleteBySa(@Param('id') id: string): Promise<void> {
     await this.commandBus.execute(new DeleteBlogCommand(id));
   }
 
   //
   @Post(':id/posts')
-  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiOperation({ summary: 'Create post in blog (SA)' })
+  @ApiParam({ name: 'id', type: String, description: 'Blog id' })
+  @ApiResponse({ status: 201, description: 'Post created', type: PostViewDto })
+  @ApiResponse({
+    status: 401,
+    description: 'Unauthorized',
+    schema: {
+      type: 'object',
+      properties: { message: { type: 'string', example: 'Unauthorized' } },
+      example: { message: 'Unauthorized' },
+    },
+  })
   async createPostBySa(
     @Param('id') id: string,
     @Body() dto: PostUpdateOnBlogRouteDto,
@@ -106,7 +166,18 @@ export class SaBlogsController {
 
   @Get(':id/posts')
   @HttpCode(HttpStatus.OK)
-  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiOperation({ summary: 'Get posts of blog (SA)' })
+  @ApiParam({ name: 'id', type: String, description: 'Blog id' })
+  @ApiResponse({ status: 200, description: 'Posts returned' })
+  @ApiResponse({
+    status: 401,
+    description: 'Unauthorized',
+    schema: {
+      type: 'object',
+      properties: { message: { type: 'string', example: 'Unauthorized' } },
+      example: { message: 'Unauthorized' },
+    },
+  })
   async getPostsByBlogIdBySa(
     @Param('id') id: string,
     @Query() query: GetPostsQueryParams,
@@ -116,7 +187,19 @@ export class SaBlogsController {
 
   @Put(':id/posts/:postId')
   @HttpCode(HttpStatus.NO_CONTENT)
-  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiOperation({ summary: 'Update post in blog (SA)' })
+  @ApiParam({ name: 'id', type: String, description: 'Blog id' })
+  @ApiParam({ name: 'postId', type: String, description: 'Post id' })
+  @ApiResponse({ status: 204, description: 'Post updated' })
+  @ApiResponse({
+    status: 401,
+    description: 'Unauthorized',
+    schema: {
+      type: 'object',
+      properties: { message: { type: 'string', example: 'Unauthorized' } },
+      example: { message: 'Unauthorized' },
+    },
+  })
   async updatePostByBlogIdBySa(
     @Param('id') id: string,
     @Param('postId') postId: string,
@@ -129,7 +212,19 @@ export class SaBlogsController {
 
   @Delete(':id/posts/:postId')
   @HttpCode(HttpStatus.NO_CONTENT)
-  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiOperation({ summary: 'Delete post in blog (SA)' })
+  @ApiParam({ name: 'id', type: String, description: 'Blog id' })
+  @ApiParam({ name: 'postId', type: String, description: 'Post id' })
+  @ApiResponse({ status: 204, description: 'Post deleted' })
+  @ApiResponse({
+    status: 401,
+    description: 'Unauthorized',
+    schema: {
+      type: 'object',
+      properties: { message: { type: 'string', example: 'Unauthorized' } },
+      example: { message: 'Unauthorized' },
+    },
+  })
   async deletePostByBlogIdBySa(
     @Param('id') id: string,
     @Param('postId') postId: string,
@@ -139,7 +234,19 @@ export class SaBlogsController {
 
   @Put(':id/bind-with-user/:userId')
   @HttpCode(HttpStatus.NO_CONTENT)
-  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiOperation({ summary: 'Bind blog with user (SA)' })
+  @ApiParam({ name: 'id', type: String, description: 'Blog id' })
+  @ApiParam({ name: 'userId', type: String, description: 'User id' })
+  @ApiResponse({ status: 204, description: 'Binding updated' })
+  @ApiResponse({
+    status: 401,
+    description: 'Unauthorized',
+    schema: {
+      type: 'object',
+      properties: { message: { type: 'string', example: 'Unauthorized' } },
+      example: { message: 'Unauthorized' },
+    },
+  })
   async updateBlogBindingWithUser(
     @Param('id') id: string,
     @Param('userId') userId: string,
@@ -155,3 +262,4 @@ export class SaBlogsController {
     );
   }
 }
+

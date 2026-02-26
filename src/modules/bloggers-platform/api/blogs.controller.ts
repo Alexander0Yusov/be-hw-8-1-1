@@ -33,16 +33,24 @@ export class BlogsController {
   ) {}
 
   @Get(':id')
-  @ApiOperation({ summary: 'Get blog by id' })
+  @ApiOperation({ summary: 'Get Blog By Id' })
   @ApiParam({ name: 'id', description: 'Blog id', required: true })
   @ApiResponse({ status: 200, description: 'Blog found', type: BlogViewDto })
-  @ApiResponse({ status: 404, description: 'Blog not found' })
+  @ApiResponse({
+    status: 404,
+    description: 'Blog not found',
+    schema: {
+      type: 'object',
+      properties: { message: { type: 'string', example: 'Blog not found' } },
+      example: { message: 'Blog not found' },
+    },
+  })
   async getById(@Param('id') id: string): Promise<BlogViewDto> {
     return this.blogsQueryRepository.findByIdOrNotFoundFail(id);
   }
 
   @Get()
-  @ApiOperation({ summary: 'Get all blogs' })
+  @ApiOperation({ summary: 'Get Blogs' })
   @ApiExtraModels(PaginatedViewDto, BlogViewDto)
   @ApiQuery({
     name: 'searchNameTerm',
@@ -105,14 +113,10 @@ export class BlogsController {
 
   @Get(':id/posts')
   @UseGuards(JwtOptionalAuthGuard)
-  @ApiOperation({
-    summary: 'Get all posts for a blog',
-    description:
-      'Retrieves a paginated list of all posts for the specified blog. JWT authentication is optional.',
-  })
+  @ApiOperation({ summary: 'Get Blog Posts' })
   @ApiParam({
     name: 'id',
-    description: 'The unique identifier of the blog to get posts for',
+    description: 'Blog id',
     required: true,
     type: String,
     example: '1',
@@ -152,7 +156,7 @@ export class BlogsController {
   @ApiExtraModels(PaginatedViewDto, PostViewDto)
   @ApiResponse({
     status: 200,
-    description: 'Paginated list of posts for the blog',
+    description: 'Posts returned',
     schema: {
       allOf: [
         { $ref: getSchemaPath(PaginatedViewDto) },
@@ -169,7 +173,7 @@ export class BlogsController {
   })
   @ApiResponse({
     status: 404,
-    description: 'Blog not found with the specified id',
+    description: 'Blog not found',
   })
   async getPostsForBlog(
     @Param('id') id: string,
@@ -193,3 +197,4 @@ export class BlogsController {
     return posts;
   }
 }
+

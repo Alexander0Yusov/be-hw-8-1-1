@@ -11,7 +11,13 @@ import {
   Query,
   UseGuards,
 } from '@nestjs/common';
-import { ApiResponse } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiOperation,
+  ApiParam,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { BlogInputDto } from '../dto/blog/blog-input.dto';
 import { BlogViewDto } from '../dto/blog/blog-view.dto';
 import { CreateBlogCommand } from '../application/usecases/blogs/create-blog.usecase';
@@ -34,6 +40,7 @@ import { UserContextDto } from '../../user-accounts/guards/dto/user-context.dto'
 import { ExtractUserFromRequest } from '../../user-accounts/guards/decorators/param/extract-user-from-request.decorator';
 import { PaginatedViewDto } from '../../../core/dto/base.paginated.view-dto';
 
+@ApiTags('Blogger Blogs')
 @Controller('blogger/blogs')
 export class BloggersController {
   constructor(
@@ -46,7 +53,18 @@ export class BloggersController {
 
   @Post()
   @UseGuards(JwtAuthGuard)
-  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Create blog for current user' })
+  @ApiResponse({ status: 201, description: 'Blog created', type: BlogViewDto })
+  @ApiResponse({
+    status: 401,
+    description: 'Unauthorized',
+    schema: {
+      type: 'object',
+      properties: { message: { type: 'string', example: 'Unauthorized' } },
+      example: { message: 'Unauthorized' },
+    },
+  })
   async createNewBlog(
     @Body() dto: BlogInputDto,
     @ExtractUserFromRequest() user: UserContextDto,
@@ -60,7 +78,18 @@ export class BloggersController {
 
   @Get()
   @UseGuards(JwtAuthGuard)
-  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Get current user blogs' })
+  @ApiResponse({ status: 200, description: 'Blogs returned' })
+  @ApiResponse({
+    status: 401,
+    description: 'Unauthorized',
+    schema: {
+      type: 'object',
+      properties: { message: { type: 'string', example: 'Unauthorized' } },
+      example: { message: 'Unauthorized' },
+    },
+  })
   async getAllByUserId(
     @Query() query: GetBlogsQueryParams,
     @ExtractUserFromRequest() user: UserContextDto,
@@ -76,7 +105,19 @@ export class BloggersController {
   @Put(':id')
   @UseGuards(JwtAuthGuard)
   @HttpCode(HttpStatus.NO_CONTENT)
-  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Update blog by id' })
+  @ApiParam({ name: 'id', type: String, description: 'Blog id' })
+  @ApiResponse({ status: 204, description: 'Blog updated' })
+  @ApiResponse({
+    status: 401,
+    description: 'Unauthorized',
+    schema: {
+      type: 'object',
+      properties: { message: { type: 'string', example: 'Unauthorized' } },
+      example: { message: 'Unauthorized' },
+    },
+  })
   async updateBlog(
     @Param('id') id: string,
     @ExtractUserFromRequest() user: UserContextDto,
@@ -88,7 +129,19 @@ export class BloggersController {
   @Delete(':id')
   @UseGuards(JwtAuthGuard)
   @HttpCode(HttpStatus.NO_CONTENT)
-  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Delete blog by id' })
+  @ApiParam({ name: 'id', type: String, description: 'Blog id' })
+  @ApiResponse({ status: 204, description: 'Blog deleted' })
+  @ApiResponse({
+    status: 401,
+    description: 'Unauthorized',
+    schema: {
+      type: 'object',
+      properties: { message: { type: 'string', example: 'Unauthorized' } },
+      example: { message: 'Unauthorized' },
+    },
+  })
   async deleteBlog(
     @Param('id') id: string,
     @ExtractUserFromRequest() user: UserContextDto,
@@ -99,7 +152,19 @@ export class BloggersController {
   //
   @Post(':id/posts')
   @UseGuards(JwtAuthGuard)
-  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Create post in blog' })
+  @ApiParam({ name: 'id', type: String, description: 'Blog id' })
+  @ApiResponse({ status: 201, description: 'Post created', type: PostViewDto })
+  @ApiResponse({
+    status: 401,
+    description: 'Unauthorized',
+    schema: {
+      type: 'object',
+      properties: { message: { type: 'string', example: 'Unauthorized' } },
+      example: { message: 'Unauthorized' },
+    },
+  })
   async createPost(
     @Param('id') id: string,
     @ExtractUserFromRequest() user: UserContextDto,
@@ -116,7 +181,19 @@ export class BloggersController {
 
   @Get(':id/posts')
   @UseGuards(JwtAuthGuard)
-  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Get posts for current user blog' })
+  @ApiParam({ name: 'id', type: String, description: 'Blog id' })
+  @ApiResponse({ status: 200, description: 'Posts returned' })
+  @ApiResponse({
+    status: 401,
+    description: 'Unauthorized',
+    schema: {
+      type: 'object',
+      properties: { message: { type: 'string', example: 'Unauthorized' } },
+      example: { message: 'Unauthorized' },
+    },
+  })
   async getAllPostsForUser(
     @Param('id') id: string,
     @ExtractUserFromRequest() user: UserContextDto,
@@ -130,7 +207,20 @@ export class BloggersController {
   @Put(':id/posts/:postId')
   @UseGuards(JwtAuthGuard)
   @HttpCode(HttpStatus.NO_CONTENT)
-  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Update post in blog' })
+  @ApiParam({ name: 'id', type: String, description: 'Blog id' })
+  @ApiParam({ name: 'postId', type: String, description: 'Post id' })
+  @ApiResponse({ status: 204, description: 'Post updated' })
+  @ApiResponse({
+    status: 401,
+    description: 'Unauthorized',
+    schema: {
+      type: 'object',
+      properties: { message: { type: 'string', example: 'Unauthorized' } },
+      example: { message: 'Unauthorized' },
+    },
+  })
   async updatePost(
     @Param('id') id: string,
     @Param('postId') postId: string,
@@ -145,7 +235,20 @@ export class BloggersController {
   @Delete(':id/posts/:postId')
   @UseGuards(JwtAuthGuard)
   @HttpCode(HttpStatus.NO_CONTENT)
-  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Delete post from blog' })
+  @ApiParam({ name: 'id', type: String, description: 'Blog id' })
+  @ApiParam({ name: 'postId', type: String, description: 'Post id' })
+  @ApiResponse({ status: 204, description: 'Post deleted' })
+  @ApiResponse({
+    status: 401,
+    description: 'Unauthorized',
+    schema: {
+      type: 'object',
+      properties: { message: { type: 'string', example: 'Unauthorized' } },
+      example: { message: 'Unauthorized' },
+    },
+  })
   async deletePost(
     @Param('id') id: string,
     @Param('postId') postId: string,
@@ -154,3 +257,4 @@ export class BloggersController {
     await this.commandBus.execute(new DeletePostCommand(id, postId, user.id));
   }
 }
+

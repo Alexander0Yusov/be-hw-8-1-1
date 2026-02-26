@@ -12,6 +12,7 @@ import {
 import {
   ApiBearerAuth,
   ApiBody,
+  ApiTags,
   ApiOperation,
   ApiParam,
   ApiResponse,
@@ -30,6 +31,9 @@ import { UserContextDto } from '../../user-accounts/guards/dto/user-context.dto'
 import { JwtOptionalAuthGuard } from '../../user-accounts/guards/bearer/jwt-optional-auth.guard';
 import { ExtractUserIfExistsFromRequest } from '../../user-accounts/guards/decorators/param/extract-user-if-exists-from-request.decorator';
 
+import { CommentViewDto } from '../dto/comment/comment-view.dto';
+
+@ApiTags('Comments')
 @Controller('comments')
 @SkipThrottle()
 export class CommentsController {
@@ -38,43 +42,62 @@ export class CommentsController {
   @Put(':id')
   @UseGuards(JwtAuthGuard)
   @HttpCode(HttpStatus.NO_CONTENT)
-  @ApiOperation({
-    summary: 'Update comment by id',
-    description:
-      'Updates the comment. Requires JWT authentication. Returns 204 No Content on success.',
-  })
+  @ApiOperation({ summary: 'Update Comment' })
   @ApiBearerAuth()
   @ApiParam({
     name: 'id',
-    description: 'The unique identifier of the comment to update its content.',
+    description: 'Comment id',
     required: true,
     type: String,
     example: '1',
   })
   @ApiBody({
     type: CommentUpdateDto,
-    description: 'The comment data',
-    examples: {
-      example1: {
-        summary: 'Comment content',
-        value: {
-          content: 'This is a great post! Very informative and well written.',
+    description: 'Comment payload',
+  })
+  @ApiResponse({
+    status: HttpStatus.NO_CONTENT,
+    description: 'Comment updated',
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Validation error',
+    schema: {
+      type: 'object',
+      properties: {
+        errorsMessages: {
+          type: 'array',
+          items: {
+            type: 'object',
+            properties: {
+              message: { type: 'string', example: 'Validation error' },
+              field: { type: 'string', example: 'content' },
+            },
+          },
         },
+      },
+      example: {
+        errorsMessages: [{ message: 'Validation error', field: 'content' }],
       },
     },
   })
   @ApiResponse({
-    status: HttpStatus.NO_CONTENT,
-    description: 'Comment updated successfully - no content',
+    status: 401,
+    description: 'Unauthorized',
+    schema: {
+      type: 'object',
+      properties: { message: { type: 'string', example: 'Unauthorized' } },
+      example: { message: 'Unauthorized' },
+    },
   })
-  @ApiResponse({
-    status: 400,
-    description: 'Bad request - invalid input value',
-  })
-  @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({
     status: 404,
-    description: 'Comment not found for the provided id',
+    description: 'Comment not found',
+    schema: {
+      type: 'object',
+      properties: { message: { type: 'string', example: 'Comment not found' } },
+      example: { message: 'Comment not found' },
+    },
   })
   async updateComment(
     @Param('id') id: string,
@@ -87,7 +110,51 @@ export class CommentsController {
   @Put(':id/like-status')
   @UseGuards(JwtAuthGuard)
   @HttpCode(HttpStatus.NO_CONTENT)
-  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Update like status for a comment' })
+  @ApiParam({ name: 'id', type: String, description: 'Comment id' })
+  @ApiBody({ type: LikeInputDto })
+  @ApiResponse({ status: 204, description: 'Like status updated' })
+  @ApiResponse({
+    status: 400,
+    description: 'Validation error',
+    schema: {
+      type: 'object',
+      properties: {
+        errorsMessages: {
+          type: 'array',
+          items: {
+            type: 'object',
+            properties: {
+              message: { type: 'string', example: 'Validation error' },
+              field: { type: 'string', example: 'email' },
+            },
+          },
+        },
+      },
+      example: {
+        errorsMessages: [{ message: 'Validation error', field: 'email' }],
+      },
+    },
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'Unauthorized',
+    schema: {
+      type: 'object',
+      properties: { message: { type: 'string', example: 'Unauthorized' } },
+      example: { message: 'Unauthorized' },
+    },
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Comment not found',
+    schema: {
+      type: 'object',
+      properties: { message: { type: 'string', example: 'Comment not found' } },
+      example: { message: 'Comment not found' },
+    },
+  })
   async updateCommentLikeStatus(
     @Param('id') id: string,
     @Body() like: LikeInputDto,
@@ -101,7 +168,28 @@ export class CommentsController {
   @Delete(':id')
   @UseGuards(JwtAuthGuard)
   @HttpCode(HttpStatus.NO_CONTENT)
-  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Delete comment by id' })
+  @ApiParam({ name: 'id', type: String, description: 'Comment id' })
+  @ApiResponse({ status: 204, description: 'Comment deleted' })
+  @ApiResponse({
+    status: 401,
+    description: 'Unauthorized',
+    schema: {
+      type: 'object',
+      properties: { message: { type: 'string', example: 'Unauthorized' } },
+      example: { message: 'Unauthorized' },
+    },
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Comment not found',
+    schema: {
+      type: 'object',
+      properties: { message: { type: 'string', example: 'Comment not found' } },
+      example: { message: 'Comment not found' },
+    },
+  })
   async deleteComment(
     @Param('id') id: string,
     @ExtractUserFromRequest() user: UserContextDto,
@@ -111,6 +199,18 @@ export class CommentsController {
 
   @Get(':id')
   @UseGuards(JwtOptionalAuthGuard)
+  @ApiOperation({ summary: 'Get comment by id' })
+  @ApiParam({ name: 'id', type: String, description: 'Comment id' })
+  @ApiResponse({ status: 200, description: 'Comment found', type: CommentViewDto })
+  @ApiResponse({
+    status: 404,
+    description: 'Comment not found',
+    schema: {
+      type: 'object',
+      properties: { message: { type: 'string', example: 'Comment not found' } },
+      example: { message: 'Comment not found' },
+    },
+  })
   async getComment(
     @Param('id') id: string,
     @ExtractUserIfExistsFromRequest() user: UserContextDto,
@@ -120,3 +220,4 @@ export class CommentsController {
 }
 
 // создать шину, зарегать, создать команду, обработчик
+

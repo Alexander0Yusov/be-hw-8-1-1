@@ -1,8 +1,15 @@
+import { ApiProperty } from '@nestjs/swagger';
 import { StatisticViewDto } from './statistic-view.dto';
 
+class PlayerStatisticViewDto {
+  @ApiProperty({ example: '42' })
+  id: string;
+
+  @ApiProperty({ example: 'john_doe' })
+  login: string;
+}
+
 export class StatisticTopViewDto extends StatisticViewDto {
-  player: {
-    id: 'string';
-    login: 'string';
-  };
+  @ApiProperty({ type: PlayerStatisticViewDto })
+  player: PlayerStatisticViewDto;
 }

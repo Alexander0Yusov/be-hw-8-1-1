@@ -1,10 +1,17 @@
-import { OmitType } from '@nestjs/swagger';
+import { ApiProperty, OmitType } from '@nestjs/swagger';
 import { User } from '../../domain/user/user.entity';
 
 export class UserViewDto {
+  @ApiProperty({ example: '1' })
   id: string;
+
+  @ApiProperty({ example: 'john_doe' })
   login: string;
+
+  @ApiProperty({ example: 'john@example.com' })
   email: string;
+
+  @ApiProperty({ example: '2026-02-26T14:10:00.000Z' })
   createdAt: Date;
 
   static mapToView(user: User) {
@@ -24,6 +31,7 @@ export class MeViewDto extends OmitType(UserViewDto, [
   'createdAt',
   'id',
 ] as const) {
+  @ApiProperty({ example: '1' })
   userId: string;
 
   static mapToView(user: User): MeViewDto {

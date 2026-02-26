@@ -1,16 +1,43 @@
 import { Game } from '../../domain/game/game.entity';
 import { PlayerProgress } from '../../domain/player-progress/player-progress.entity';
+import { ApiProperty } from '@nestjs/swagger';
 import { GameStatuses } from './answer-status';
 import { GamePlayerProgressView } from './game-player-progress-view';
 
-export class PostConnectionViewDto {
+class QuestionShortViewDto {
+  @ApiProperty({ example: '1' })
   id: string;
+
+  @ApiProperty({ example: 'Capital of Great Britain?' })
+  body: string;
+}
+
+export class PostConnectionViewDto {
+  @ApiProperty({ example: '1' })
+  id: string;
+
+  @ApiProperty({ type: GamePlayerProgressView })
   firstPlayerProgress: GamePlayerProgressView;
+
+  @ApiProperty({ type: GamePlayerProgressView, nullable: true })
   secondPlayerProgress: null | GamePlayerProgressView;
+
+  @ApiProperty({ type: [QuestionShortViewDto], nullable: true })
   questions: { id: string; body: string }[] | null;
+
+  @ApiProperty({
+    enum: GameStatuses,
+    example: GameStatuses.Active,
+  })
   status: GameStatuses;
+
+  @ApiProperty({ example: '2026-02-26T14:10:00.000Z' })
   pairCreatedDate: Date;
+
+  @ApiProperty({ example: '2026-02-26T14:11:00.000Z', nullable: true })
   startGameDate: Date | null;
+
+  @ApiProperty({ example: null, nullable: true })
   finishGameDate: Date | null;
 
   static mapFrom(game: Game): PostConnectionViewDto {

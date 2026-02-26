@@ -1,9 +1,11 @@
 import { Controller, Delete, HttpCode, HttpStatus } from '@nestjs/common';
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { InjectDataSource } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
 // import { InjectConnection } from '@nestjs/mongoose';
 // import { Connection } from 'mongoose';
 
+@ApiTags('Testing')
 @Controller('testing')
 export class TestingController {
   constructor(@InjectDataSource() private dataSource: DataSource) {
@@ -15,6 +17,8 @@ export class TestingController {
 
   @Delete('all-data')
   @HttpCode(HttpStatus.NO_CONTENT)
+  @ApiOperation({ summary: 'Delete all data (testing only)' })
+  @ApiResponse({ status: 204, description: 'All data deleted' })
   async deleteAll() {
     console.log('DELETE /api/testing/all-data вызван');
 
