@@ -16,8 +16,16 @@ import { SessionViewDto } from '../dto/session/session-view.dto';
 import { TerminateAllExcludeCurrentSessionCommand } from '../application/usecases/sessions/terminate-all-exclude-current-session.usecase';
 import { TerminateByIdCommand } from '../application/usecases/sessions/terminate-by-id-session.usecase';
 import { SkipThrottle } from '@nestjs/throttler';
+import {
+  ApiBearerAuth,
+  ApiOperation,
+  ApiParam,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 
 @SkipThrottle()
+@ApiTags('Security Devices')
 @Controller('security')
 export class SecurityDevicesController {
   constructor(
@@ -27,6 +35,18 @@ export class SecurityDevicesController {
 
   @Get('devices')
   @UseGuards(RefreshJwtAuthGuard)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Get all active sessions/devices' })
+  @ApiResponse({ status: 200, description: 'Sessions returned', type: [SessionViewDto] })
+  @ApiResponse({
+    status: 401,
+    description: 'Unauthorized',
+    schema: {
+      type: 'object',
+      properties: { message: { type: 'string', example: 'Unauthorized' } },
+      example: { message: 'Unauthorized' },
+    },
+  })
   async getDevices(
     @Device() deviceContext: DeviceContextDto,
   ): Promise<SessionViewDto[]> {
@@ -38,6 +58,18 @@ export class SecurityDevicesController {
   @Delete('devices')
   @UseGuards(RefreshJwtAuthGuard)
   @HttpCode(HttpStatus.NO_CONTENT)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Terminate all sessions except current one' })
+  @ApiResponse({ status: 204, description: 'Sessions terminated' })
+  @ApiResponse({
+    status: 401,
+    description: 'Unauthorized',
+    schema: {
+      type: 'object',
+      properties: { message: { type: 'string', example: 'Unauthorized' } },
+      example: { message: 'Unauthorized' },
+    },
+  })
   async deleteDevicesExcludeCurrent(
     @Device() deviceContext: DeviceContextDto,
   ): Promise<void> {
@@ -52,6 +84,19 @@ export class SecurityDevicesController {
   @Delete('devices/:id')
   @UseGuards(RefreshJwtAuthGuard)
   @HttpCode(HttpStatus.NO_CONTENT)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Terminate session by device id' })
+  @ApiParam({ name: 'id', type: String, description: 'Device id' })
+  @ApiResponse({ status: 204, description: 'Session terminated' })
+  @ApiResponse({
+    status: 401,
+    description: 'Unauthorized',
+    schema: {
+      type: 'object',
+      properties: { message: { type: 'string', example: 'Unauthorized' } },
+      example: { message: 'Unauthorized' },
+    },
+  })
   async deleteDeviceById(
     @Param('id') id: string,
     @Device() deviceContext: DeviceContextDto,
@@ -64,3 +109,4 @@ export class SecurityDevicesController {
     );
   }
 }
+

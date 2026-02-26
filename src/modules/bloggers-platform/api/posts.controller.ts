@@ -62,11 +62,19 @@ export class PostsController {
 
   @Post()
   @UseGuards(BasicAuthGuard)
-  @ApiOperation({ summary: 'Create a new post' })
+  @ApiOperation({ summary: 'Create Post' })
   @ApiBasicAuth()
   @ApiBody({ type: PostInputDto })
   @ApiResponse({ status: 201, description: 'Post created', type: PostViewDto })
-  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({
+    status: 401,
+    description: 'Unauthorized',
+    schema: {
+      type: 'object',
+      properties: { message: { type: 'string', example: 'Unauthorized' } },
+      example: { message: 'Unauthorized' },
+    },
+  })
   async create(@Body() dto: PostInputDto): Promise<PostViewDto> {
     const postId = await this.commandBus.execute(
       new CreatePostCommand(
@@ -83,7 +91,7 @@ export class PostsController {
 
   @Get(':id')
   @UseGuards(JwtOptionalAuthGuard)
-  @ApiOperation({ summary: 'Get post by id' })
+  @ApiOperation({ summary: 'Get Post By Id' })
   @ApiParam({
     name: 'id',
     description: 'Post id',
@@ -92,7 +100,15 @@ export class PostsController {
     example: '1',
   })
   @ApiResponse({ status: 200, description: 'Post found', type: PostViewDto })
-  @ApiResponse({ status: 404, description: 'Post not found' })
+  @ApiResponse({
+    status: 404,
+    description: 'Post not found',
+    schema: {
+      type: 'object',
+      properties: { message: { type: 'string', example: 'Post not found' } },
+      example: { message: 'Post not found' },
+    },
+  })
   async getById(
     @Param('id') id: string,
     @ExtractUserIfExistsFromRequest() user: UserContextDto,
@@ -102,7 +118,7 @@ export class PostsController {
 
   @Get()
   @UseGuards(JwtOptionalAuthGuard)
-  @ApiOperation({ summary: 'Get all posts' })
+  @ApiOperation({ summary: 'Get Posts' })
   @ApiExtraModels(PaginatedViewDto, PostViewDto)
   @ApiQuery({
     name: 'sortBy',
@@ -172,67 +188,63 @@ export class PostsController {
 
   @Post(':id/comments')
   @UseGuards(JwtAuthGuard)
-  @ApiOperation({
-    summary: 'Create a comment for a post',
-    description:
-      'Creates a new comment on the specified post. Requires JWT authentication.',
-  })
+  @ApiOperation({ summary: 'Create Comment For Post' })
   @ApiBearerAuth()
   @ApiParam({
     name: 'id',
-    description: 'The unique identifier of the post to add a comment to',
+    description: 'Post id',
     required: true,
     type: String,
     example: '1',
   })
   @ApiBody({
     type: CommentInputDto,
-    description: 'Comment data containing the content text',
-    examples: {
-      example1: {
-        value: {
-          content: 'This is a great post! Very informative and well written.',
-        },
-      },
-    },
+    description: 'Comment payload',
   })
   @ApiResponse({
     status: 201,
-    description: 'Comment created successfully and returned',
+    description: 'Comment created',
     type: CommentViewDto,
-    examples: {
-      example1: {
-        summary: 'Successfully created comment response',
-        value: {
-          id: '1',
-          content: 'This is a great post! Very informative and well written.',
-          commentatorInfo: {
-            userId: '1',
-            userLogin: 'john_doe',
-          },
-          createdAt: '2025-02-17T10:30:00.000Z',
-          likesInfo: {
-            likesCount: 0,
-            dislikesCount: 0,
-            myStatus: 'None',
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Validation error',
+    schema: {
+      type: 'object',
+      properties: {
+        errorsMessages: {
+          type: 'array',
+          items: {
+            type: 'object',
+            properties: {
+              message: { type: 'string', example: 'Validation error' },
+              field: { type: 'string', example: 'content' },
+            },
           },
         },
+      },
+      example: {
+        errorsMessages: [{ message: 'Validation error', field: 'content' }],
       },
     },
   })
   @ApiResponse({
-    status: 400,
-    description:
-      'Bad request - invalid comment data (content must be 20-300 characters)',
-  })
-  @ApiResponse({
     status: 401,
-    description:
-      'Unauthorized - JWT token is missing or invalid. Enter JWT Bearer token only',
+    description: 'Unauthorized',
+    schema: {
+      type: 'object',
+      properties: { message: { type: 'string', example: 'Unauthorized' } },
+      example: { message: 'Unauthorized' },
+    },
   })
   @ApiResponse({
     status: 404,
-    description: 'Post not found with the specified id',
+    description: 'Post not found',
+    schema: {
+      type: 'object',
+      properties: { message: { type: 'string', example: 'Post not found' } },
+      example: { message: 'Post not found' },
+    },
   })
   async createCommentForCurrentPost(
     @Param('id') id: string,
@@ -252,59 +264,62 @@ export class PostsController {
   @Put(':id/like-status')
   @UseGuards(JwtAuthGuard)
   @HttpCode(HttpStatus.NO_CONTENT)
-  @ApiOperation({
-    summary: 'Update like status for a post',
-    description:
-      'Updates the like or dislike status for the specified post. Requires JWT authentication. Returns 204 No Content on success.',
-  })
+  @ApiOperation({ summary: 'Update Post Like Status' })
   @ApiBearerAuth()
   @ApiParam({
     name: 'id',
-    description: 'The unique identifier of the post to update like status for',
+    description: 'Post id',
     required: true,
     type: String,
     example: '1',
   })
   @ApiBody({
     type: LikeInputDto,
-    description: 'Like status data',
-    examples: {
-      like: {
-        summary: 'Like the post',
-        value: {
-          likeStatus: 'Like',
+    description: 'Like status payload',
+  })
+  @ApiResponse({
+    status: 204,
+    description: 'Like status updated',
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Validation error',
+    schema: {
+      type: 'object',
+      properties: {
+        errorsMessages: {
+          type: 'array',
+          items: {
+            type: 'object',
+            properties: {
+              message: { type: 'string', example: 'Validation error' },
+              field: { type: 'string', example: 'likeStatus' },
+            },
+          },
         },
       },
-      dislike: {
-        summary: 'Dislike the post',
-        value: {
-          likeStatus: 'Dislike',
-        },
-      },
-      none: {
-        summary: 'Remove like/dislike',
-        value: {
-          likeStatus: 'None',
-        },
+      example: {
+        errorsMessages: [{ message: 'Validation error', field: 'likeStatus' }],
       },
     },
   })
   @ApiResponse({
-    status: 204,
-    description: 'Like status updated successfully',
-  })
-  @ApiResponse({
-    status: 400,
-    description: 'Bad request - invalid like status value',
-  })
-  @ApiResponse({
     status: 401,
-    description:
-      'Unauthorized - JWT token is missing or invalid. Enter JWT Bearer token only',
+    description: 'Unauthorized',
+    schema: {
+      type: 'object',
+      properties: { message: { type: 'string', example: 'Unauthorized' } },
+      example: { message: 'Unauthorized' },
+    },
   })
   @ApiResponse({
     status: 404,
-    description: 'Post not found with the specified id',
+    description: 'Post not found',
+    schema: {
+      type: 'object',
+      properties: { message: { type: 'string', example: 'Post not found' } },
+      example: { message: 'Post not found' },
+    },
   })
   async updateLikeStatusForCurrentPost(
     @Param('id') id: string,
@@ -318,14 +333,10 @@ export class PostsController {
 
   @Get(':id/comments')
   @UseGuards(JwtOptionalAuthGuard)
-  @ApiOperation({
-    summary: 'Get all comments for a post',
-    description:
-      'Retrieves a paginated list of all comments for the specified post. JWT authentication is optional.',
-  })
+  @ApiOperation({ summary: 'Get Post Comments' })
   @ApiParam({
     name: 'id',
-    description: 'The unique identifier of the post to get comments for',
+    description: 'Post id',
     required: true,
     type: String,
     example: '1',
@@ -365,7 +376,7 @@ export class PostsController {
   @ApiExtraModels(PaginatedViewDto, CommentViewDto)
   @ApiResponse({
     status: 200,
-    description: 'Paginated list of comments for the post',
+    description: 'Comments returned',
     schema: {
       allOf: [
         { $ref: getSchemaPath(PaginatedViewDto) },
@@ -382,7 +393,12 @@ export class PostsController {
   })
   @ApiResponse({
     status: 404,
-    description: 'Post not found with the specified id',
+    description: 'Post not found',
+    schema: {
+      type: 'object',
+      properties: { message: { type: 'string', example: 'Post not found' } },
+      example: { message: 'Post not found' },
+    },
   })
   async getCommentsByPostId(
     @Param('id') id: string,
@@ -410,3 +426,4 @@ export class PostsController {
     return comments;
   }
 }
+

@@ -10,7 +10,16 @@ import {
   Query,
   UseGuards,
 } from '@nestjs/common';
-import { ApiResponse } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiExtraModels,
+  ApiOperation,
+  ApiParam,
+  ApiQuery,
+  ApiResponse,
+  ApiTags,
+  getSchemaPath,
+} from '@nestjs/swagger';
 import { PostConnectionViewDto } from '../dto/game-pair-quiz/post-connection-view.dto';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { GamesQueryRepository } from '../infrastructure/query/games-query.repository';
@@ -32,6 +41,7 @@ import { ExtractUserFromRequest } from '../../user-accounts/guards/decorators/pa
 import { UserContextDto } from '../../user-accounts/guards/dto/user-context.dto';
 import { PaginatedViewDto } from '../../../core/dto/base.paginated.view-dto';
 
+@ApiTags('Pair Game Quiz')
 @Controller('pair-game-quiz')
 export class PairGameQuizController {
   constructor(
@@ -46,7 +56,27 @@ export class PairGameQuizController {
   @Post('pairs/connection')
   @UseGuards(JwtAuthGuard)
   @HttpCode(HttpStatus.OK)
-  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Connect Or Create Pair' })
+  @ApiResponse({ status: 200, description: 'Game returned', type: PostConnectionViewDto })
+  @ApiResponse({
+    status: 403,
+    description: 'Current user is already in active pair',
+    schema: {
+      type: 'object',
+      properties: { message: { type: 'string', example: 'Current user is already in active pair' } },
+      example: { message: 'Current user is already in active pair' },
+    },
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'Unauthorized',
+    schema: {
+      type: 'object',
+      properties: { message: { type: 'string', example: 'Unauthorized' } },
+      example: { message: 'Unauthorized' },
+    },
+  })
   async connectOrCreatePair(
     @ExtractUserFromRequest() user: UserContextDto,
   ): Promise<PostConnectionViewDto | null> {
@@ -62,7 +92,40 @@ export class PairGameQuizController {
   @Post('pairs/my-current/answers')
   @UseGuards(JwtAuthGuard)
   @HttpCode(HttpStatus.OK)
-  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Create Answer In Current Game' })
+  @ApiResponse({ status: 200, description: 'Answer accepted', type: AnswerView })
+  @ApiResponse({
+    status: 400,
+    description: 'Bad request',
+    schema: {
+      type: 'object',
+      properties: {
+        errorsMessages: {
+          type: 'array',
+          items: {
+            type: 'object',
+            properties: {
+              message: { type: 'string', example: 'Bad request' },
+              field: { type: 'string', example: 'input' },
+            },
+          },
+        },
+      },
+      example: {
+        errorsMessages: [{ message: 'Bad request', field: 'input' }],
+      },
+    },
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'Unauthorized',
+    schema: {
+      type: 'object',
+      properties: { message: { type: 'string', example: 'Unauthorized' } },
+      example: { message: 'Unauthorized' },
+    },
+  })
   async postAnswer(
     @ExtractUserFromRequest() user: UserContextDto,
     @Body() body: AnswerInputDto,
@@ -80,7 +143,27 @@ export class PairGameQuizController {
   @Get('pairs/my-current')
   @UseGuards(JwtAuthGuard)
   @HttpCode(HttpStatus.OK)
-  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Get Current Game' })
+  @ApiResponse({ status: 200, description: 'Current game returned', type: PostConnectionViewDto })
+  @ApiResponse({
+    status: 404,
+    description: 'Active game not found',
+    schema: {
+      type: 'object',
+      properties: { message: { type: 'string', example: 'Active game not found' } },
+      example: { message: 'Active game not found' },
+    },
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'Unauthorized',
+    schema: {
+      type: 'object',
+      properties: { message: { type: 'string', example: 'Unauthorized' } },
+      example: { message: 'Unauthorized' },
+    },
+  })
   async getCurrent(
     @ExtractUserFromRequest() user: UserContextDto,
   ): Promise<PostConnectionViewDto> {
@@ -94,6 +177,18 @@ export class PairGameQuizController {
   @Get('users/my-statistic')
   @UseGuards(JwtAuthGuard)
   @HttpCode(HttpStatus.OK)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Get My Statistic' })
+  @ApiResponse({ status: 200, description: 'Statistic returned', type: StatisticViewDto })
+  @ApiResponse({
+    status: 401,
+    description: 'Unauthorized',
+    schema: {
+      type: 'object',
+      properties: { message: { type: 'string', example: 'Unauthorized' } },
+      example: { message: 'Unauthorized' },
+    },
+  })
   async getMyStatistic(
     @ExtractUserFromRequest() user: UserContextDto,
   ): Promise<StatisticViewDto> {
@@ -108,6 +203,28 @@ export class PairGameQuizController {
 
   @Get('users/top')
   @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Get Top Statistics' })
+  @ApiQuery({ name: 'sort', required: false, type: String, description: 'Sort criteria' })
+  @ApiQuery({ name: 'pageNumber', required: false, type: Number })
+  @ApiQuery({ name: 'pageSize', required: false, type: Number })
+  @ApiExtraModels(PaginatedViewDto, StatisticTopViewDto)
+  @ApiResponse({
+    status: 200,
+    description: 'Top statistics returned',
+    schema: {
+      allOf: [
+        { $ref: getSchemaPath(PaginatedViewDto) },
+        {
+          properties: {
+            items: {
+              type: 'array',
+              items: { $ref: getSchemaPath(StatisticTopViewDto) },
+            },
+          },
+        },
+      ],
+    },
+  })
   async getAllUsersStatistic(
     @Query()
     query: GetTopStatisticQueryParams,
@@ -118,7 +235,35 @@ export class PairGameQuizController {
   @Get('pairs/my')
   @UseGuards(JwtAuthGuard)
   @HttpCode(HttpStatus.OK)
-  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Get My Games' })
+  @ApiExtraModels(PaginatedViewDto, PostConnectionViewDto)
+  @ApiResponse({
+    status: 200,
+    description: 'Games returned',
+    schema: {
+      allOf: [
+        { $ref: getSchemaPath(PaginatedViewDto) },
+        {
+          properties: {
+            items: {
+              type: 'array',
+              items: { $ref: getSchemaPath(PostConnectionViewDto) },
+            },
+          },
+        },
+      ],
+    },
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'Unauthorized',
+    schema: {
+      type: 'object',
+      properties: { message: { type: 'string', example: 'Unauthorized' } },
+      example: { message: 'Unauthorized' },
+    },
+  })
   async getAll(
     @Query() query: GetMyGamesQueryParams,
     @ExtractUserFromRequest() user: UserContextDto,
@@ -134,7 +279,50 @@ export class PairGameQuizController {
   @Get('pairs/:id')
   @UseGuards(JwtAuthGuard)
   @HttpCode(HttpStatus.OK)
-  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Get Game By Id' })
+  @ApiParam({ name: 'id', type: String, description: 'Game id' })
+  @ApiResponse({ status: 200, description: 'Game returned', type: PostConnectionViewDto })
+  @ApiResponse({
+    status: 400,
+    description: 'Invalid id format',
+    schema: {
+      type: 'object',
+      properties: {
+        errorsMessages: {
+          type: 'array',
+          items: {
+            type: 'object',
+            properties: {
+              message: { type: 'string', example: 'Invalid id format' },
+              field: { type: 'string', example: 'id' },
+            },
+          },
+        },
+      },
+      example: {
+        errorsMessages: [{ message: 'Invalid id format', field: 'id' }],
+      },
+    },
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Game not found',
+    schema: {
+      type: 'object',
+      properties: { message: { type: 'string', example: 'Game not found' } },
+      example: { message: 'Game not found' },
+    },
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'Unauthorized',
+    schema: {
+      type: 'object',
+      properties: { message: { type: 'string', example: 'Unauthorized' } },
+      example: { message: 'Unauthorized' },
+    },
+  })
   async getCurrentById(
     @Param('id') id: string,
     @ExtractUserFromRequest() user: UserContextDto,
@@ -152,3 +340,4 @@ export class PairGameQuizController {
     return await this.queryBus.execute(new GetGameByIdQuery(id, user.id));
   }
 }
+
