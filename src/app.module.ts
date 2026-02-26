@@ -10,7 +10,7 @@ import { UserAccountsModule } from './modules/user-accounts/user-accounts.module
 import { NotificationsModule } from './modules/notifications/notifications.module';
 import { MailerModule } from './modules/mailer/mailer.module';
 import { CoreModule } from './core/core.module';
-import { CoreConfig } from './core/core.config';
+import { CoreConfig, Environments } from './core/core.config';
 import { ThrottlerModule } from '@nestjs/throttler';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { QuizModule } from './modules/quiz/quiz.module';
@@ -25,6 +25,10 @@ import { QuizModule } from './modules/quiz/quiz.module';
     TypeOrmModule.forRootAsync({
       imports: [CoreModule],
       useFactory: (coreConfig: CoreConfig) => {
+        const useSsl =
+          coreConfig.env === Environments.STAGING ||
+          coreConfig.env === Environments.PRODUCTION;
+
         return {
           type: 'postgres',
           host: coreConfig.postgresHost,
@@ -32,12 +36,14 @@ import { QuizModule } from './modules/quiz/quiz.module';
           username: coreConfig.postgresUser,
           password: coreConfig.postgresPassword,
           database: coreConfig.postgresDatabase,
-          ssl: true,
-          extra: {
-            ssl: {
-              rejectUnauthorized: false,
-            },
-          },
+          ssl: useSsl,
+          extra: useSsl
+            ? {
+                ssl: {
+                  rejectUnauthorized: false,
+                },
+              }
+            : undefined,
           // entities: [__dirname + '/../**/*.entity.{ts,js}'], // либо поштучно перчислить каждую сущность
           synchronize: true, // ❗ Только для разработки
           autoLoadEntities: true,
