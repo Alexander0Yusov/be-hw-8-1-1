@@ -1,3 +1,40 @@
+## Environment Variables
+
+Use one of the environment templates and create a local file for your runtime:
+
+```bash
+cp .env.development.example .env.development
+```
+
+Available templates in Git:
+
+- `.env.development.example`
+- `.env.testing.example`
+- `.env.staging.example`
+- `.env.production.example`
+- `.env.example` (generic baseline)
+
+Real local files (not tracked):
+
+- `.env.development`
+- `.env.testing`
+- `.env.staging`
+- `.env.production`
+
+Optional local overrides (higher priority):
+
+- `.env.development.local`
+- `.env.testing.local`
+- `.env.staging.local`
+- `.env.production.local`
+
+All real `.env*` files are ignored by Git. Only `*.example` templates are committed.
+
+If env files were already committed earlier, remove them from Git index once:
+
+```bash
+git rm --cached .env.development .env.testing .env.staging .env.production
+```
 <p align="center">
   <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
 </p>
